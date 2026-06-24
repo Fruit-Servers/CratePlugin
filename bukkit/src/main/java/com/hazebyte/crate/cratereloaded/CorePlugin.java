@@ -1,7 +1,5 @@
 package com.hazebyte.crate.cratereloaded;
 
-import static com.hazebyte.crate.cratereloaded.util.ConfigConstants.CONFIG_FILE_NAME;
-
 import co.aikar.commands.BukkitCommandManager;
 import com.hazebyte.crate.api.CrateAPI;
 import com.hazebyte.crate.api.CratePlugin;
@@ -16,13 +14,13 @@ import com.hazebyte.crate.cratereloaded.cmd.CrateCommandManager;
 import com.hazebyte.crate.cratereloaded.component.impl.FilePluginSettingComponentImpl;
 import com.hazebyte.crate.cratereloaded.crate.BlockCrateHandler;
 import com.hazebyte.crate.cratereloaded.crate.CrateHandler;
+import com.hazebyte.crate.cratereloaded.crate.animation.Animation;
 import com.hazebyte.crate.cratereloaded.dagger.DaggerJavaPluginComponent;
 import com.hazebyte.crate.cratereloaded.dagger.JavaPluginComponent;
 import com.hazebyte.crate.cratereloaded.listener.ListenerManager;
 import com.hazebyte.crate.cratereloaded.listener.original.WorldLoadListener;
 import com.hazebyte.crate.cratereloaded.locale.Locales;
 import com.hazebyte.crate.cratereloaded.metric.CrateMetrics;
-import com.hazebyte.crate.cratereloaded.model.Config;
 import com.hazebyte.crate.cratereloaded.model.mapper.CrateMapper;
 import com.hazebyte.crate.cratereloaded.model.mapper.RewardMapper;
 import com.hazebyte.crate.cratereloaded.provider.EconomyProviderSelector;
@@ -56,7 +54,7 @@ import org.mapstruct.factory.Mappers;
 /**
  * The plugin's central core that handles individual parts of the plugin. Allows for static calls
  * through the instance of the plugin.
- * 
+ *
  * <p>This class serves as the main entry point for the CrateReloaded plugin. It initializes all
  * necessary components, manages the plugin lifecycle, and provides access to various plugin
  * functionalities through its methods. It implements the CratePlugin interface to provide
@@ -76,49 +74,49 @@ import org.mapstruct.factory.Mappers;
 public class CorePlugin extends JavaPlugin implements CratePlugin {
     /** Metadata placeholder for Spigot user identification */
     public static String SPIGOT_USER_META = "%%__USER__%%";
-    
+
     /** Metadata placeholder for Spigot resource identification */
     public static String SPIGOT_RESOURCE_META = "%%__RESOURCE__%%";
-    
+
     /** Metadata placeholder for Spigot download nonce */
     public static String SPIGOT_DOWNLOAD_META = "%%__NONCE__%%";
-    
+
     /** Static instance of the plugin for global access */
     private static CorePlugin plugin;
-    
+
     /** Command manager for handling plugin commands */
     private static BukkitCommandManager commandHandler;
-    
+
     /** Dagger component for dependency injection */
     private static JavaPluginComponent javaPluginComponent;
 
     /** Handler for managing exceptions throughout the plugin */
     private ExceptionHandler exceptionHandler;
-    
+
     /** Handler for managing crates and their functionality */
     private CrateHandler crateHandler;
-    
+
     /** Manager for handling claim-related operations */
     private ClaimManager claimManager;
-    
+
     /** Handler for managing block-based crates */
     private BlockCrateHandler blockCrateHandler;
-    
+
     /** Manager for plugin event listeners */
     private ListenerManager listenerHandler;
-    
+
     /** Provider for holographic displays */
     private HologramProvider<? extends HologramWrapper> hologramProvider;
-    
+
     /** Provider for economy integration */
     private EconomyProvider<? extends EconomyResponse> economyProvider;
-    
+
     /** Current server version information */
     private ServerVersion serverVersion;
-    
+
     /** Localization manager for plugin messages */
     private Locales locale;
-    
+
     /** Metrics collector for plugin usage statistics */
     private Metrics metrics;
 
@@ -127,10 +125,10 @@ public class CorePlugin extends JavaPlugin implements CratePlugin {
 
     /** Mapper for converting between crate models */
     public static final CrateMapper CRATE_MAPPER = Mappers.getMapper(CrateMapper.class);
-    
+
     /** Mapper for converting between reward models */
     public static final RewardMapper REWARD_MAPPER = Mappers.getMapper(RewardMapper.class);
-    
+
     /** Flag indicating whether the plugin is fully initialized and ready */
     private boolean isReady = false;
 
@@ -165,9 +163,8 @@ public class CorePlugin extends JavaPlugin implements CratePlugin {
     @Deprecated
     public static CorePlugin getPlugin() {
         if (plugin == null) {
-            throw new IllegalStateException(
-                    "CorePlugin instance is null - plugin may be disabled or not yet loaded. "
-                            + "Avoid static access and use dependency injection instead.");
+            throw new IllegalStateException("CorePlugin instance is null - plugin may be disabled or not yet loaded. "
+                    + "Avoid static access and use dependency injection instead.");
         }
         return plugin;
     }
@@ -203,7 +200,7 @@ public class CorePlugin extends JavaPlugin implements CratePlugin {
         onEnable();
     }
 
-    /** 
+    /**
      * Registers the locale manager and loads language files.
      * This initializes the localization system for the plugin.
      */
@@ -248,7 +245,7 @@ public class CorePlugin extends JavaPlugin implements CratePlugin {
 
     /**
      * Starts the cleanup process when the plugin is disabled.
-     * 
+     *
      * <p>This method performs the following cleanup operations:</p>
      * <ul>
      *   <li>Clears world load listeners</li>
@@ -264,22 +261,22 @@ public class CorePlugin extends JavaPlugin implements CratePlugin {
     public void onDisable() {
         // Clear world load listeners
         WorldLoadListener.clear();
-        
+
         // Dispose effect services
         getJavaPluginComponent().getEffectServiceComponent().dispose();
-        
+
         // Remove all holograms
         hologramProvider.removeAll();
-        
+
         // Unregister commands
         commandHandler.unregisterCommands();
-        
+
         // Close and remove logger handlers
         for (Handler handler : this.getLogger().getHandlers()) {
             handler.close();
             this.getLogger().removeHandler(handler);
         }
-        
+
         // Unregister all event listeners
         HandlerList.unregisterAll(this);
 
@@ -291,9 +288,12 @@ public class CorePlugin extends JavaPlugin implements CratePlugin {
         listenerHandler = null;
         economyProvider = null;
         hologramProvider = null;
-        
+
         // Cancel all scheduled tasks
         Bukkit.getScheduler().cancelTasks(this);
+
+        // Cancelled tasks orphan legacy animation tracking; clear it so a reload doesn't strand players
+        Animation.clearTracked();
 
         // Nullify remaining references
         // WARNING: Setting static references to null can cause NPEs in async tasks
@@ -308,7 +308,7 @@ public class CorePlugin extends JavaPlugin implements CratePlugin {
 
     /**
      * Initializes the plugin when it is enabled.
-     * 
+     *
      * <p>This method performs the following initialization steps:</p>
      * <ul>
      *   <li>Sets up the plugin instance and API implementation</li>
@@ -351,14 +351,15 @@ public class CorePlugin extends JavaPlugin implements CratePlugin {
             registerLogger();
 
             // Initialize claim manager
-            claimManager = new ClaimManager(this, javaPluginComponent.getClaimExecutor(), javaPluginComponent.getPluginSettingComponent());
+            claimManager = new ClaimManager(
+                    this, javaPluginComponent.getClaimExecutor(), javaPluginComponent.getPluginSettingComponent());
 
             // Set up localization and metrics if not in mock mode
             if (!getServerVersion().isMockServer()) {
                 registerLocale(); // TODO: Review
                 metrics = new CrateMetrics(this);
             }
-            
+
             // Register service providers
             registerHolographics();
             registerEconomy();
@@ -370,7 +371,7 @@ public class CorePlugin extends JavaPlugin implements CratePlugin {
 
             // Set up command handler
             commandHandler = new CrateCommandManager(this);
-            
+
             // Mark plugin as ready
             ready();
         } catch (Exception ex) {
@@ -502,7 +503,7 @@ public class CorePlugin extends JavaPlugin implements CratePlugin {
 
     /**
      * Helper method to get a provider from a selector with error handling.
-     * 
+     *
      * <p>This method attempts to get a provider based on the specified preference.
      * If the provider cannot be obtained due to dependency issues or invalid input,
      * it falls back to a nil provider. For other reflective operation exceptions,
@@ -540,7 +541,7 @@ public class CorePlugin extends JavaPlugin implements CratePlugin {
     private void registerHolographics() throws ReflectiveOperationException {
         // Create the hologram provider selector
         ProviderSelector<HologramProvider> hologramProviderSelector = new HologramProviderSelector(this);
-        
+
         // Get the configured preference
         String preference = CorePlugin.getPlugin().getSettings().getHologramPluginPreference();
 
@@ -581,28 +582,28 @@ public class CorePlugin extends JavaPlugin implements CratePlugin {
 
         // Set up JSON formatter for logs
         Formatter formatter = new JSONFormatter();
-        
+
         // Get log level from settings
         Level level = CorePlugin.getPlugin().getSettings().getLogLevel();
-        
+
         // Create date-based log file pattern
         String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         String filePattern = String.format("%s.%%u.%%g.log", date);
-        
+
         // Create logs directory if it doesn't exist
         File logFolder = new File(plugin.getDataFolder(), "logs");
         if (!logFolder.exists()) {
             logFolder.mkdirs();
         }
-        
+
         // Set up file handler with pattern
         String fileHandlerPattern = logFolder.getAbsolutePath() + File.separator + filePattern;
         FileHandler handler = new FileHandler(fileHandlerPattern);
-        
+
         // Configure handler with formatter and level
         handler.setFormatter(formatter);
         handler.setLevel(level);
-        
+
         // Set logger level and add handler
         getLogger().setLevel(level);
         this.getLogger().addHandler(handler);

@@ -22,8 +22,6 @@ import com.hazebyte.crate.api.util.Messenger;
 import com.hazebyte.crate.cratereloaded.CorePlugin;
 import com.hazebyte.crate.cratereloaded.component.ClaimCrateComponent;
 import com.hazebyte.crate.cratereloaded.component.GiveCrateComponent;
-import com.hazebyte.crate.cratereloaded.component.impl.ClaimCrateComponentImpl;
-import com.hazebyte.crate.cratereloaded.component.impl.GiveCrateComponentImpl;
 import com.hazebyte.crate.cratereloaded.util.Camera;
 import com.hazebyte.crate.cratereloaded.util.LocationUtil;
 import com.hazebyte.crate.cratereloaded.util.format.CustomFormat;
@@ -55,8 +53,8 @@ public class CrateCommand extends BaseCommand {
     @Subcommand("version")
     @Description("Tells you the plugin's attributes")
     public void onVersion(CommandSender sender) {
-        TextComponent versionMessage = new TextComponent("CrateReloaded Version "
-                + plugin.getDescription().getVersion());
+        TextComponent versionMessage = new TextComponent(
+                "CrateReloaded Version " + plugin.getDescription().getVersion());
         TextComponent authorMessage = new TextComponent("by Will (bart7567) and ToXiicalhebest");
         TextComponent supportLink = new TextComponent("[Support / Need Help]");
         TextComponent bugReportLink = new TextComponent("[Report an issue]");
@@ -123,8 +121,7 @@ public class CrateCommand extends BaseCommand {
         @CommandPermission("cr.claim")
         @Description("Claim rewards/crates that have been given to you")
         public void onClaim(Player player) {
-            ClaimCrateComponent component =
-                    CorePlugin.getJavaPluginComponent().getClaimCrateComponent();
+            ClaimCrateComponent component = CorePlugin.getJavaPluginComponent().getClaimCrateComponent();
             component.openClaim(player);
         }
 
@@ -133,8 +130,7 @@ public class CrateCommand extends BaseCommand {
         @CommandCompletion("all")
         @Description("Claim all rewards/crates that have been given to you")
         public void onClaimAll(Player player) {
-            ClaimCrateComponent component =
-                    CorePlugin.getJavaPluginComponent().getClaimCrateComponent();
+            ClaimCrateComponent component = CorePlugin.getJavaPluginComponent().getClaimCrateComponent();
             component.claimAllRewards(player);
         }
     }
@@ -184,8 +180,8 @@ public class CrateCommand extends BaseCommand {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
                 List<String> crates = new ArrayList<>();
-                List<Crate> locationCrates = plugin.getBlockCrateRegistrar()
-                        .getCrates(Camera.getTargetBlockLocation(player));
+                List<Crate> locationCrates =
+                        plugin.getBlockCrateRegistrar().getCrates(Camera.getTargetBlockLocation(player));
                 if (locationCrates != null) {
                     locationCrates.forEach(crate -> crates.add(crate.getCrateName()));
                 }
@@ -269,8 +265,7 @@ public class CrateCommand extends BaseCommand {
             Crate crate,
             @Default("1") Integer amount,
             @Default("online") Boolean isOnline) {
-        GiveCrateComponent component =
-                CorePlugin.getJavaPluginComponent().getGiveCrateComponent();
+        GiveCrateComponent component = CorePlugin.getJavaPluginComponent().getGiveCrateComponent();
         boolean sendToClaim = !isOnline;
         component.giveCrate(sender, offlinePlayer, crate, amount, sendToClaim);
     }
@@ -281,8 +276,7 @@ public class CrateCommand extends BaseCommand {
     @Syntax("<crate> [number]")
     @Description("Give a specific number of crates to all players")
     public void onAll(CommandSender sender, Crate crate, @Default("1") Integer amount) {
-        GiveCrateComponent component =
-                CorePlugin.getJavaPluginComponent().getGiveCrateComponent();
+        GiveCrateComponent component = CorePlugin.getJavaPluginComponent().getGiveCrateComponent();
         component.giveCrateToAllOnlinePlayers(sender, crate, amount);
     }
 

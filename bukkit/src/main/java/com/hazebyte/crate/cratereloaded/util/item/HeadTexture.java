@@ -6,15 +6,14 @@ import com.hazebyte.crate.cratereloaded.CorePlugin;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
-import lombok.NonNull;
-import org.bukkit.inventory.meta.SkullMeta;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.logging.Level;
+import lombok.NonNull;
+import org.bukkit.inventory.meta.SkullMeta;
 
 /** Created by wixu on 6/22/17. */
 public class HeadTexture {

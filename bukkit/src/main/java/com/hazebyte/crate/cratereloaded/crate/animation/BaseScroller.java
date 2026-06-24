@@ -95,9 +95,7 @@ public abstract class BaseScroller extends Animation {
         if (settings.isHandlingClaims()) {
             handleClaims(player, rewards);
         } else {
-            CorePlugin.getJavaPluginComponent()
-                    .getOpenCrateComponent()
-                    .executeReward(player, rewards.get(0));
+            CorePlugin.getJavaPluginComponent().getOpenCrateComponent().executeReward(player, rewards.get(0));
         }
     }
 

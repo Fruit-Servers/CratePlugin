@@ -26,9 +26,7 @@ public class ClaimExecutor implements Function<Claim, Boolean> {
     private final Logger logger;
 
     public ClaimExecutor(
-            @NonNull CorePlugin plugin,
-            @NonNull OpenCrateComponent openCrateComponent,
-            @NonNull Logger logger) {
+            @NonNull CorePlugin plugin, @NonNull OpenCrateComponent openCrateComponent, @NonNull Logger logger) {
         this.plugin = plugin;
         this.openCrateComponent = openCrateComponent;
         this.logger = logger;

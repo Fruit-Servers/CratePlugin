@@ -31,8 +31,7 @@ public class RewardValidatorImpl implements RewardValidator<RewardV2> {
             return ValidationResult.failure(Error.of("Reward chance must be >= 0, got: " + chance));
         }
         if (chance > 100) {
-            return ValidationResult.failure(
-                    Error.of("Reward chance must be <= 100, got: " + chance));
+            return ValidationResult.failure(Error.of("Reward chance must be <= 100, got: " + chance));
         }
         return ValidationResult.success();
     }

@@ -9,7 +9,6 @@ import com.hazebyte.crate.api.claim.Claim;
 import com.hazebyte.crate.api.crate.reward.Reward;
 import com.hazebyte.crate.cratereloaded.CorePlugin;
 import com.hazebyte.crate.cratereloaded.claim.ClaimExecutor;
-import com.hazebyte.crate.cratereloaded.claim.CrateClaim;
 import com.hazebyte.crate.cratereloaded.claim.storage.ClaimStorage;
 import com.hazebyte.crate.cratereloaded.model.Config;
 import com.hazebyte.crate.cratereloaded.util.ConfigConstants;
@@ -38,7 +37,8 @@ public class YamlClaimStorage implements ClaimStorage {
     }
 
     protected Config getConfig(OfflinePlayer player) {
-        final String path = String.format("%s%s.yml", ConfigConstants.CONFIG_CLAIM_STORE_SEARCH_INDEX, player.getUniqueId());
+        final String path =
+                String.format("%s%s.yml", ConfigConstants.CONFIG_CLAIM_STORE_SEARCH_INDEX, player.getUniqueId());
         final Config config =
                 CorePlugin.getJavaPluginComponent().getConfigManagerComponent().getConfigWithName(path);
         if (config != null) {
@@ -100,8 +100,7 @@ public class YamlClaimStorage implements ClaimStorage {
                             .log(
                                     java.util.logging.Level.WARNING,
                                     String.format(
-                                            "Unable to parse claim data for %s (key: %s)",
-                                            player.getUniqueId(), key),
+                                            "Unable to parse claim data for %s (key: %s)", player.getUniqueId(), key),
                                     err);
                 }
             }
@@ -138,7 +137,8 @@ public class YamlClaimStorage implements ClaimStorage {
                         .log(
                                 java.util.logging.Level.SEVERE,
                                 String.format(
-                                        "Failed to save claim for player %s", claim.getOwner().getUniqueId()),
+                                        "Failed to save claim for player %s",
+                                        claim.getOwner().getUniqueId()),
                                 e);
                 throw new CompletionException(e);
             }
@@ -149,7 +149,8 @@ public class YamlClaimStorage implements ClaimStorage {
      * Synchronously deletes a claim from disk. Should only be called from async context.
      */
     private void deleteClaimSync(Claim claim) {
-        plugin.getLogger().finer(String.format("Claim: rm %s %d", claim.getOwner().getUniqueId(), claim.getTimestamp()));
+        plugin.getLogger()
+                .finer(String.format("Claim: rm %s %d", claim.getOwner().getUniqueId(), claim.getTimestamp()));
         Config config = getConfig(claim.getOwner());
         UUID uuid = claim.getId();
         config.getConfig().set(uuid.toString(), null);
@@ -159,7 +160,9 @@ public class YamlClaimStorage implements ClaimStorage {
             plugin.getLogger()
                     .log(
                             java.util.logging.Level.SEVERE,
-                            String.format("Failed to delete claim for player %s", claim.getOwner().getUniqueId()),
+                            String.format(
+                                    "Failed to delete claim for player %s",
+                                    claim.getOwner().getUniqueId()),
                             e);
         }
     }

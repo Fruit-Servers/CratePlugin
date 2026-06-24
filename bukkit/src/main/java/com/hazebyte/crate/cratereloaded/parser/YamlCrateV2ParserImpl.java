@@ -1,6 +1,5 @@
 package com.hazebyte.crate.cratereloaded.parser;
 
-import com.hazebyte.crate.Error;
 import com.hazebyte.crate.api.crate.AnimationType;
 import com.hazebyte.crate.api.crate.CrateType;
 import com.hazebyte.crate.api.crate.EndAnimationType;
@@ -17,21 +16,14 @@ import com.hazebyte.crate.cratereloaded.util.format.CustomFormat;
 import com.hazebyte.crate.cratereloaded.util.item.ItemParser;
 import com.hazebyte.crate.cratereloaded.validation.CrateValidatorImpl;
 import com.hazebyte.crate.validation.ValidationResult;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.*;
 
 /**
  * Parses YAML crate configurations directly into CrateV2 data models.
@@ -51,10 +43,12 @@ public class YamlCrateV2ParserImpl {
     private static final String BUY_ENABLED = "buy.enabled";
     private static final String REWARD_MINIMUM_REWARDS = "reward.minimum-rewards";
     private static final String REWARD_MAXIMUM_REWARDS = "reward.maximum-rewards";
+    private static final String PREVIEW_ENABLED = "preview.enabled";
     private static final String PREVIEW_ROWS = "preview.rows";
     private static final String MESSAGE_OPEN = "message.open";
     private static final String MESSAGE_BROADCAST = "message.broadcast";
     private static final String HOLOGRAPHIC_TEXT = "holographic-text";
+    private static final String HOLOGRAPHIC_TEXT_LEGACY = "holographic";
 
     private final CorePlugin plugin;
     private final PluginSettingComponent settings;
@@ -80,7 +74,8 @@ public class YamlCrateV2ParserImpl {
      * @return List of parsed CrateV2 objects
      */
     public List<CrateV2> parse(@NonNull Config config) {
-        log.fine(String.format("Reading Crate Config File (V2): %s", config.getFile().getName()));
+        log.fine(String.format(
+                "Reading Crate Config File (V2): %s", config.getFile().getName()));
 
         if (config.getConfig() == null) {
             throw new RuntimeException("Storage Configuration is not set up correctly");
@@ -120,7 +115,8 @@ public class YamlCrateV2ParserImpl {
 
         if (section == null) {
             log.severe(String.format(
-                    "Crate section [%s] is invalid in file [%s]", crateName, config.getFile().getName()));
+                    "Crate section [%s] is invalid in file [%s]",
+                    crateName, config.getFile().getName()));
             return null;
         }
 
@@ -139,6 +135,7 @@ public class YamlCrateV2ParserImpl {
                     .forSale(section.getBoolean(BUY_ENABLED, false))
                     .openMessage(parseOpenMessage(section))
                     .broadcastMessage(parseBroadcastMessage(section))
+                    .previewable(section.getBoolean(PREVIEW_ENABLED, true))
                     .previewRows(section.getInt(PREVIEW_ROWS, 3))
                     .confirmBeforeUse(section.getBoolean(CONFIRMATION_ENABLED, false))
                     .acceptButton(parseAcceptButton(section))
@@ -155,17 +152,15 @@ public class YamlCrateV2ParserImpl {
             ValidationResult validationResult = crateValidator.validate(crate);
             if (!validationResult.isValid()) {
                 log.severe(String.format(
-                        "Crate [%s] failed validation in file [%s]:", crateName, config.getFile().getName()));
+                        "Crate [%s] failed validation in file [%s]:",
+                        crateName, config.getFile().getName()));
                 validationResult.getErrors().forEach(error -> log.severe("  - " + error.getMessage()));
                 return null;
             }
 
             return crate;
         } catch (Exception e) {
-            log.log(
-                    java.util.logging.Level.SEVERE,
-                    String.format("Error building CrateV2 [%s]", crateName),
-                    e);
+            log.log(java.util.logging.Level.SEVERE, String.format("Error building CrateV2 [%s]", crateName), e);
             return null;
         }
     }
@@ -288,8 +283,7 @@ public class YamlCrateV2ParserImpl {
      * @param defaultButton Default button from global settings
      * @return Parsed or default button
      */
-    private ItemStack parseButton(
-            @NonNull ConfigurationSection section, @NonNull String key, ItemStack defaultButton) {
+    private ItemStack parseButton(@NonNull ConfigurationSection section, @NonNull String key, ItemStack defaultButton) {
         if (!section.isSet(key)) {
             return defaultButton;
         }
@@ -329,11 +323,15 @@ public class YamlCrateV2ParserImpl {
     }
 
     private List<String> parseHolographicText(@NonNull ConfigurationSection section) {
-        if (!section.isSet(HOLOGRAPHIC_TEXT)) {
-            return Collections.emptyList();
+        if (section.isSet(HOLOGRAPHIC_TEXT)) {
+            return section.getStringList(HOLOGRAPHIC_TEXT);
+        }
+        // legacy support
+        if (section.isSet(HOLOGRAPHIC_TEXT_LEGACY)) {
+            return section.getStringList(HOLOGRAPHIC_TEXT_LEGACY);
         }
 
-        return section.getStringList(HOLOGRAPHIC_TEXT);
+        return Collections.emptyList();
     }
 
     /**
@@ -345,8 +343,7 @@ public class YamlCrateV2ParserImpl {
      * @param crateName Name of the crate (for logging and effect key generation)
      * @return Map of Category to effect configuration keys
      */
-    private Map<Category, List<String>> parseEffects(
-            @NonNull ConfigurationSection section, @NonNull String crateName) {
+    private Map<Category, List<String>> parseEffects(@NonNull ConfigurationSection section, @NonNull String crateName) {
         Map<Category, List<String>> effectMap = new HashMap<>();
 
         if (!section.isSet("effect")) {

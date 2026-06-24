@@ -20,12 +20,12 @@ import com.hazebyte.crate.cratereloaded.util.PlayerUtil;
 import com.hazebyte.crate.cratereloaded.util.RewardFactory;
 import com.hazebyte.crate.cratereloaded.util.format.CustomFormat;
 import java.util.Arrays;
-import java.util.logging.Level;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 import javax.inject.Inject;
 import lombok.NonNull;
 import org.bukkit.Bukkit;
@@ -68,8 +68,8 @@ public class GiveCrateComponentImpl implements GiveCrateComponent {
 
         StringBuilder status = new StringBuilder("&5STATUS: ");
         boolean isInventoryFull = offlinePlayer.isOnline() && PlayerUtil.isInventoryFull(offlinePlayer.getPlayer());
-        boolean isHandlingClaims = settings.isHandlingClaims()
-                && (!offlinePlayer.isOnline() || sendToClaim || isInventoryFull);
+        boolean isHandlingClaims =
+                settings.isHandlingClaims() && (!offlinePlayer.isOnline() || sendToClaim || isInventoryFull);
         if (isHandlingClaims) {
             Optional<CompletableFuture<Claim>> optional = this.giveCrateToOfflinePlayer(offlinePlayer, crate, amount);
             if (!optional.isPresent()) {
@@ -77,36 +77,37 @@ public class GiveCrateComponentImpl implements GiveCrateComponent {
             }
             CompletableFuture<Claim> future = optional.get();
             future.thenAccept(claim -> {
-                if (!offlinePlayer.isOnline()) {
-                    String message = CrateAPI.getMessage("core.claim_offline_player");
-                    Messenger.tell(sender, CustomFormat.format(message, offlinePlayer));
-                } else {
-                    plugin.getClaimManager()
-                            .getClaims(player)
-                            .thenAccept(new ClaimMessageConsumer(player))
-                            .exceptionally(throwable -> {
-                                plugin.getLogger()
-                                        .log(
-                                                Level.SEVERE,
-                                                "Failed to fetch claims for claim notification",
-                                                throwable);
-                                return null;
-                            });
-                    String message = CrateAPI.getMessage("core.claim_online_player");
-                    Messenger.tell(sender, CustomFormat.format(message, player));
-                }
-            })
-            .exceptionally(throwable -> {
-                plugin.getLogger()
-                        .log(
-                                Level.SEVERE,
-                                String.format("Failed to save claim for player %s", offlinePlayer.getName()),
-                                throwable);
-                Messenger.tell(
-                        sender,
-                        String.format("&cFailed to save claim for %s. Please try again.", offlinePlayer.getName()));
-                return null;
-            });
+                        if (!offlinePlayer.isOnline()) {
+                            String message = CrateAPI.getMessage("core.claim_offline_player");
+                            Messenger.tell(sender, CustomFormat.format(message, offlinePlayer));
+                        } else {
+                            plugin.getClaimManager()
+                                    .getClaims(player)
+                                    .thenAccept(new ClaimMessageConsumer(player))
+                                    .exceptionally(throwable -> {
+                                        plugin.getLogger()
+                                                .log(
+                                                        Level.SEVERE,
+                                                        "Failed to fetch claims for claim notification",
+                                                        throwable);
+                                        return null;
+                                    });
+                            String message = CrateAPI.getMessage("core.claim_online_player");
+                            Messenger.tell(sender, CustomFormat.format(message, player));
+                        }
+                    })
+                    .exceptionally(throwable -> {
+                        plugin.getLogger()
+                                .log(
+                                        Level.SEVERE,
+                                        String.format("Failed to save claim for player %s", offlinePlayer.getName()),
+                                        throwable);
+                        Messenger.tell(
+                                sender,
+                                String.format(
+                                        "&cFailed to save claim for %s. Please try again.", offlinePlayer.getName()));
+                        return null;
+                    });
 
             status.append("&aSENT TO CLAIM.&r");
         } else {
@@ -121,10 +122,7 @@ public class GiveCrateComponentImpl implements GiveCrateComponent {
             status.append(
                     results.size() > 0
                             ? "&aSUCCESS.&r"
-                            : "&4UNSUCCESSFUL"
-                                    + (settings.isHandlingClaims()
-                                            ? "(CLAIM)"
-                                            : "(DROPPED TO GROUND)"));
+                            : "&4UNSUCCESSFUL" + (settings.isHandlingClaims() ? "(CLAIM)" : "(DROPPED TO GROUND)"));
         }
 
         if (!(sender.equals(player))) {

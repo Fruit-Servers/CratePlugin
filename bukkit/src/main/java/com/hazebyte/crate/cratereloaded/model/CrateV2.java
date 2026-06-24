@@ -5,18 +5,9 @@ import com.hazebyte.crate.api.crate.CrateType;
 import com.hazebyte.crate.api.crate.EndAnimationType;
 import com.hazebyte.crate.api.effect.Category;
 import com.hazebyte.crate.cratereloaded.crate.animation.Animation;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import javax.annotation.Nullable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -72,6 +63,8 @@ public class CrateV2 {
     @NonNull
     @Builder.Default
     private List<String> broadcastMessage = Collections.emptyList();
+
+    private boolean previewable;
 
     private int previewRows;
 

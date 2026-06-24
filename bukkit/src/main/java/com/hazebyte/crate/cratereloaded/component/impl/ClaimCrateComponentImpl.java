@@ -37,7 +37,8 @@ public class ClaimCrateComponentImpl implements ClaimCrateComponent {
     @Override
     public void openClaim(Player player) {
         ClaimRegistrar claimManager = plugin.getClaimRegistrar();
-        claimManager.getClaims(player)
+        claimManager
+                .getClaims(player)
                 .thenAccept(claims -> {
                     if (claims.size() > 0) {
                         claimManager.openInventory(player);
@@ -63,9 +64,7 @@ public class ClaimCrateComponentImpl implements ClaimCrateComponent {
                 return;
             }
 
-            int limit = Math.min(
-                    claims.size(),
-                    Math.min(settings.getClaimLimit(), PlayerUtil.getSlotsLeft(player)));
+            int limit = Math.min(claims.size(), Math.min(settings.getClaimLimit(), PlayerUtil.getSlotsLeft(player)));
 
             List<Claim> copy = new ArrayList<>();
             Iterator<Claim> iterator = claims.iterator();
@@ -87,8 +86,7 @@ public class ClaimCrateComponentImpl implements ClaimCrateComponent {
                                 plugin.getLogger()
                                         .log(
                                                 Level.SEVERE,
-                                                String.format(
-                                                        "Failed to remove claim for player %s", player.getName()),
+                                                String.format("Failed to remove claim for player %s", player.getName()),
                                                 throwable);
                                 return null;
                             });
@@ -97,18 +95,15 @@ public class ClaimCrateComponentImpl implements ClaimCrateComponent {
                     plugin.getLogger()
                             .log(
                                     Level.SEVERE,
-                                    String.format(
-                                            "Failed to initiate claim removal for player %s", player.getName()),
+                                    String.format("Failed to initiate claim removal for player %s", player.getName()),
                                     e);
                 }
             }
         };
-        manager.getClaims(player)
-                .thenAccept(test)
-                .exceptionally(throwable -> {
-                    exceptionHandler.handle((Exception) throwable);
-                    Messenger.tell(player, "&cFailed to load your claims. Please try again later.");
-                    return null;
-                });
+        manager.getClaims(player).thenAccept(test).exceptionally(throwable -> {
+            exceptionHandler.handle((Exception) throwable);
+            Messenger.tell(player, "&cFailed to load your claims. Please try again later.");
+            return null;
+        });
     }
 }

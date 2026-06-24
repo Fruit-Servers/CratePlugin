@@ -33,10 +33,15 @@ public class CrateValidatorImpl implements CrateValidator<CrateV2> {
                 .combine(validatePreviewSlots(
                         crate.getPreviewRows(),
                         crate.getRewards().size() + crate.getConstantRewards().size()))
-                .combine(validateCrateType(crate.getType(), crate.getItem().getType().name()))
+                .combine(validateCrateType(
+                        crate.getType(), crate.getItem().getType().name()))
                 .combine(validateAnimationCompatibility(
-                        crate.getAnimationType() != null ? crate.getAnimationType().name() : "NONE",
-                        crate.getEndAnimationType() != null ? crate.getEndAnimationType().name() : "BLANK"))
+                        crate.getAnimationType() != null
+                                ? crate.getAnimationType().name()
+                                : "NONE",
+                        crate.getEndAnimationType() != null
+                                ? crate.getEndAnimationType().name()
+                                : "BLANK"))
                 .build();
     }
 
@@ -56,13 +61,7 @@ public class CrateValidatorImpl implements CrateValidator<CrateV2> {
             errors.add(Error.of("Minimum rewards must be >= 1, got: " + min));
         }
         if (max < min) {
-            errors.add(
-                    Error.of(
-                            "Maximum rewards ("
-                                    + max
-                                    + ") must be >= minimum ("
-                                    + min
-                                    + ")"));
+            errors.add(Error.of("Maximum rewards (" + max + ") must be >= minimum (" + min + ")"));
         }
 
         return errors.isEmpty() ? ValidationResult.success() : ValidationResult.failure(errors);
@@ -78,25 +77,19 @@ public class CrateValidatorImpl implements CrateValidator<CrateV2> {
         // Constrain to Minecraft inventory limits
         if (neededSlots < MIN_INVENTORY_SLOTS) {
             return ValidationResult.failure(
-                    Error.of(
-                            "Preview slots must be at least "
-                                    + MIN_INVENTORY_SLOTS
-                                    + ", got: "
-                                    + neededSlots));
+                    Error.of("Preview slots must be at least " + MIN_INVENTORY_SLOTS + ", got: " + neededSlots));
         }
 
         if (neededSlots > MAX_INVENTORY_SLOTS) {
-            return ValidationResult.failure(
-                    Error.of(
-                            "Preview slots cannot exceed "
-                                    + MAX_INVENTORY_SLOTS
-                                    + ", got: "
-                                    + neededSlots
-                                    + " (rows="
-                                    + rows
-                                    + ", rewards="
-                                    + rewardCount
-                                    + ")"));
+            return ValidationResult.failure(Error.of("Preview slots cannot exceed "
+                    + MAX_INVENTORY_SLOTS
+                    + ", got: "
+                    + neededSlots
+                    + " (rows="
+                    + rows
+                    + ", rewards="
+                    + rewardCount
+                    + ")"));
         }
 
         return ValidationResult.success();
@@ -109,21 +102,17 @@ public class CrateValidatorImpl implements CrateValidator<CrateV2> {
                 Material material = Material.valueOf(materialName);
                 if (material != Material.CHEST) {
                     return ValidationResult.failure(
-                            Error.of(
-                                    "Supply crates must use CHEST material, got: "
-                                            + materialName));
+                            Error.of("Supply crates must use CHEST material, got: " + materialName));
                 }
             } catch (IllegalArgumentException e) {
-                return ValidationResult.failure(
-                        Error.of("Invalid material name: " + materialName));
+                return ValidationResult.failure(Error.of("Invalid material name: " + materialName));
             }
         }
         return ValidationResult.success();
     }
 
     @Override
-    public ValidationResult validateAnimationCompatibility(
-            String animationType, String endAnimationType) {
+    public ValidationResult validateAnimationCompatibility(String animationType, String endAnimationType) {
         // Most animations are compatible with most end animations
         // Add specific incompatibility checks here if needed
 

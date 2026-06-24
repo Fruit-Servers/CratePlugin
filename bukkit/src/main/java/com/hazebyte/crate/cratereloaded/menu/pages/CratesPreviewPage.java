@@ -21,8 +21,7 @@ public class CratesPreviewPage extends PaginationPage {
     @Override
     public void addItems() {
         crates.forEach(crate -> {
-            int size = crate.getPreviewSlots()
-                    + (settings.isMenuInteractionEnabled() ? Grid.ROWS : 0);
+            int size = crate.getPreviewSlots() + (settings.isMenuInteractionEnabled() ? Grid.ROWS : 0);
             CratePreviewPage page = new CratePreviewPage(crate, Size.fit(size), this, settings);
             PageButton button = new PageButton(this.plugin, crate.getDisplayItem(), page);
             addToQueue(button);

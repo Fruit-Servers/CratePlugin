@@ -6,7 +6,6 @@ import com.google.common.base.Strings;
 import com.hazebyte.crate.api.util.Messenger;
 import com.hazebyte.crate.cratereloaded.CorePlugin;
 import com.hazebyte.crate.cratereloaded.component.ExportComponent;
-import com.hazebyte.crate.cratereloaded.component.impl.FilePluginSettingComponentImpl;
 import com.hazebyte.crate.cratereloaded.util.Camera;
 import com.hazebyte.crate.cratereloaded.util.PlayerUtil;
 import com.hazebyte.crate.cratereloaded.util.item.ItemParser;

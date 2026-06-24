@@ -78,9 +78,7 @@ public class ClaimButton extends Button {
                 event.setWillUpdate(true);
                 used = true;
             } catch (IOException e) {
-                CorePlugin.getPlugin()
-                        .getLogger()
-                        .log(java.util.logging.Level.SEVERE, "Failed to remove claim", e);
+                CorePlugin.getPlugin().getLogger().log(java.util.logging.Level.SEVERE, "Failed to remove claim", e);
             }
         } else {
             event.setWillClose(true);

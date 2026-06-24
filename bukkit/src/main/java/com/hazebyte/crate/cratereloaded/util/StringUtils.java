@@ -41,20 +41,20 @@ public class StringUtils {
         // An exponent is 'e' or 'E' followed by an optionally signed decimal integer
         final String Exp = "[eE][+-]?" + Digits;
 
-        FLOATING_POINT_REGEX = "[\\x00-\\x20]*"  // Optional leading whitespace
-                + "[+-]?("  // Optional sign character
-                + "NaN|"  // "NaN" string
-                + "Infinity|"  // "Infinity" string
+        FLOATING_POINT_REGEX = "[\\x00-\\x20]*" // Optional leading whitespace
+                + "[+-]?(" // Optional sign character
+                + "NaN|" // "NaN" string
+                + "Infinity|" // "Infinity" string
                 // Decimal floating-point patterns:
-                + "(((" + Digits + "(\\.)?(" + Digits + "?)(" + Exp + ")?)|"  // Digits . Digits ExponentPart
-                + "(\\.(" + Digits + ")(" + Exp + ")?)|"  // . Digits ExponentPart
+                + "(((" + Digits + "(\\.)?(" + Digits + "?)(" + Exp + ")?)|" // Digits . Digits ExponentPart
+                + "(\\.(" + Digits + ")(" + Exp + ")?)|" // . Digits ExponentPart
                 // Hexadecimal floating-point patterns:
                 + "(("
-                + "(0[xX]" + HexDigits + "(\\.)?)|"  // 0x HexDigits .
-                + "(0[xX]" + HexDigits + "?(\\.)" + HexDigits + ")"  // 0x HexDigits . HexDigits
+                + "(0[xX]" + HexDigits + "(\\.)?)|" // 0x HexDigits .
+                + "(0[xX]" + HexDigits + "?(\\.)" + HexDigits + ")" // 0x HexDigits . HexDigits
                 + ")[pP][+-]?" + Digits + "))"
-                + "[fFdD]?))"  // Optional float/double suffix
-                + "[\\x00-\\x20]*";  // Optional trailing whitespace
+                + "[fFdD]?))" // Optional float/double suffix
+                + "[\\x00-\\x20]*"; // Optional trailing whitespace
     }
 
     public static boolean isInteger(String str) {

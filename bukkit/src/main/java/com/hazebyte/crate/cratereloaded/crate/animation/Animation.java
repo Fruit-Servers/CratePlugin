@@ -16,18 +16,22 @@ import com.hazebyte.util.Mat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /** Created by willi on 3/10/2017. */
 public abstract class Animation {
 
-    protected static final List<String> players = new ArrayList<>();
+    // Backs the open() re-entrancy guard; shared across all Animation instances
+    protected static final Set<String> players = ConcurrentHashMap.newKeySet();
     private static final List<Mat> panes = new ArrayList<>();
     protected CrateImpl crate;
     protected AnimationType type;
@@ -54,7 +58,6 @@ public abstract class Animation {
         this.length = 160;
         this.item = settings.getCrateAnimationShuffleDisplay();
         this.size = Size.THREE_LINE;
-        players.clear();
         AnimationMenuListener.getInstance().register(CorePlugin.getPlugin());
         checkTicks();
         setDefault();
@@ -65,7 +68,6 @@ public abstract class Animation {
         this.length = length;
         this.item = settings.getCrateAnimationShuffleDisplay();
         this.size = Size.THREE_LINE;
-        players.clear();
         AnimationMenuListener.getInstance().register(CorePlugin.getPlugin());
         checkTicks();
         setDefault();
@@ -76,7 +78,6 @@ public abstract class Animation {
         this.length = length;
         this.item = settings.getCrateAnimationShuffleDisplay();
         this.size = size;
-        players.clear();
         AnimationMenuListener.getInstance().register(CorePlugin.getPlugin());
         checkTicks();
         setDefault();
@@ -105,24 +106,48 @@ public abstract class Animation {
     public Inventory open(Player player, Location location) {
         String UUID = player.getUniqueId().toString();
         if (players.contains(UUID)) {
-            return null;
+            // Reject only if genuinely mid-animation; otherwise the entry is stale, so recover
+            if (isViewingAnimation(player)) {
+                return null;
+            }
+            players.remove(UUID);
         }
         players.add(UUID);
         return openCrate(player, location);
     }
 
+    private static boolean isViewingAnimation(Player player) {
+        InventoryView view = player.getOpenInventory();
+        return view != null
+                && view.getTopInventory() != null
+                && view.getTopInventory().getHolder() instanceof AnimationHolder;
+    }
+
+    // Called on plugin disable so cancelled tasks don't leave players flagged mid-animation
+    public static void clearTracked() {
+        players.clear();
+    }
+
     protected abstract Inventory openCrate(Player player, Location location);
 
     public void closeCrate(Player player, Location location, Reward reward, int time) {
+        final Crate crate = this.crate;
+
         new BukkitRunnable() {
             @Override
             public void run() {
-                Crate crate = reward.getParent();
+                if (crate == null) {
+                    removePlayerFromOpening(player);
+                    PlayerUtil.closeInventoryLater(player, 1);
+                    return;
+                }
+
                 crate.onRewards(
                         player,
                         Collections.singletonList(reward),
                         location,
                         (e) -> crate.runEffect(location, Category.END, player));
+
                 removePlayerFromOpening(player);
                 PlayerUtil.closeInventoryLater(player, 1);
             }

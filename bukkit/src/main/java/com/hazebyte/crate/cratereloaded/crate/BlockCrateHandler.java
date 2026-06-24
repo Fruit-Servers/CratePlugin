@@ -17,20 +17,15 @@ import com.hazebyte.crate.cratereloaded.provider.holographic.HologramWrapper;
 import com.hazebyte.crate.cratereloaded.util.ConfigConstants;
 import com.hazebyte.crate.cratereloaded.util.LocationUtil;
 import com.hazebyte.crate.cratereloaded.util.MoreObjects;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import javax.inject.Inject;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+
+import javax.inject.Inject;
+import java.io.IOException;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public class BlockCrateHandler implements BlockCrateRegistrar {
 
@@ -77,7 +72,8 @@ public class BlockCrateHandler implements BlockCrateRegistrar {
         if (location == null || crateV2 == null) {
             return false;
         }
-        return (this.crateMapV2.containsEntry(location, crateV2) || getV2(location).contains(crateV2));
+        return (this.crateMapV2.containsEntry(location, crateV2)
+                || getV2(location).contains(crateV2));
     }
 
     private Collection<CrateV2> getV2(Location location) {
@@ -104,6 +100,9 @@ public class BlockCrateHandler implements BlockCrateRegistrar {
     }
 
     private boolean contains(Location location, Crate crate) {
+        if (location == null || crate == null) {
+            return false;
+        }
         CrateV2 crateV2 = getCrateV2FromHandler(crate.getCrateName());
         if (crateV2 == null) {
             return false;
@@ -116,9 +115,7 @@ public class BlockCrateHandler implements BlockCrateRegistrar {
         Collection<CrateV2> cratesV2 = getV2(location);
         if (cratesV2 == null) return null;
         // Convert V2 to legacy Crate for API compatibility
-        return cratesV2.stream()
-                .map(CorePlugin.CRATE_MAPPER::toImplementation)
-                .collect(Collectors.toList());
+        return cratesV2.stream().map(CorePlugin.CRATE_MAPPER::toImplementation).collect(Collectors.toList());
     }
 
     private CrateV2 getCrateV2FromHandler(String crateName) {

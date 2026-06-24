@@ -14,11 +14,7 @@ import com.hazebyte.crate.cratereloaded.component.model.CrateOpenResponse;
 import com.hazebyte.crate.cratereloaded.crate.animationV2.Animation;
 import com.hazebyte.crate.cratereloaded.crate.animationV2.prebuilt.CsgoAnimationGenerator;
 import com.hazebyte.crate.cratereloaded.crate.animationV2.prebuilt.RouletteAnimationGenerator;
-import com.hazebyte.crate.cratereloaded.model.CrateImpl;
-import com.hazebyte.crate.cratereloaded.model.CrateV2;
-import com.hazebyte.crate.cratereloaded.model.GiveItemExecutorResult;
-import com.hazebyte.crate.cratereloaded.model.RewardImpl;
-import com.hazebyte.crate.cratereloaded.model.RewardV2;
+import com.hazebyte.crate.cratereloaded.model.*;
 import com.hazebyte.crate.cratereloaded.util.CommandUtil;
 import com.hazebyte.crate.cratereloaded.util.StringUtils;
 import com.hazebyte.crate.cratereloaded.util.format.CustomFormat;
@@ -44,6 +40,7 @@ public class OpenCrateComponentImpl implements OpenCrateComponent {
         this.plugin = plugin;
         this.givePlayerItemsComponent = givePlayerItemsComponent;
     }
+
     @Override
     public CrateOpenResponse openCrate(@NonNull CrateOpenRequest request) {
         // Get CrateV2 (primary) - no conversion needed!
@@ -52,29 +49,40 @@ public class OpenCrateComponentImpl implements OpenCrateComponent {
         // Animation V2 (native CrateV2 usage!)
         if (crateV2.getAnimationType() != null && crateV2.getAnimationType() == AnimationType.ROULETTE_V2) {
             Animation animation = new RouletteAnimationGenerator().createAnimation(request.getPlayer(), crateV2);
-            CorePlugin.getJavaPluginComponent().getAnimationManager().startAnimation(animation);
-            return CrateOpenResponse.builder().build();
+            boolean opened =
+                    CorePlugin.getJavaPluginComponent().getAnimationManager().startAnimation(animation);
+            return CrateOpenResponse.builder().opened(opened).build();
         } else if (crateV2.getAnimationType() != null && crateV2.getAnimationType() == AnimationType.CSGO_V2) {
             Animation animation = new CsgoAnimationGenerator().createAnimation(request.getPlayer(), crateV2);
-            CorePlugin.getJavaPluginComponent().getAnimationManager().startAnimation(animation);
-            return CrateOpenResponse.builder().build();
-        } else if (crateV2.getAnimation() != null) {
-            // Legacy animation - need CrateImpl
+            boolean opened =
+                    CorePlugin.getJavaPluginComponent().getAnimationManager().startAnimation(animation);
+            return CrateOpenResponse.builder().opened(opened).build();
+        } else if (crateV2.getAnimation() != null || crateV2.getAnimationType() != AnimationType.NONE) {
             CrateImpl crate = CorePlugin.CRATE_MAPPER.toImplementation(crateV2);
-            Inventory inventory = crate.getAnimation().open(request.getPlayer(), request.getLocation());
-            if (inventory == null) {
-                Messenger.warning(String.format(
-                        "Animation has not ended for player: [%s]",
-                        request.getPlayer().getName()));
+            if (crate.getAnimation() == null) {
+                com.hazebyte.crate.cratereloaded.crate.animation.Animation animation =
+                        CorePlugin.getJavaPluginComponent()
+                                .getAnimationFactoryComponent()
+                                .createAnimation(crateV2.getAnimationType(), crate);
+                crate.setAnimation(animation);
             }
-            return CrateOpenResponse.builder().build();
+            if (crate.getAnimation() != null) {
+                Inventory inventory = crate.getAnimation().open(request.getPlayer(), request.getLocation());
+                if (inventory == null) {
+                    // Null inventory: player already mid-animation, so don't consume the key
+                    Messenger.warning(String.format(
+                            "Animation has not ended for player: [%s]",
+                            request.getPlayer().getName()));
+                    return CrateOpenResponse.builder().opened(false).build();
+                }
+                return CrateOpenResponse.builder().build();
+            }
         }
 
         // Direct rewards (no animation)
         // Convert to CrateImpl for legacy reward system (temporary)
         CrateImpl crate = CorePlugin.CRATE_MAPPER.toImplementation(crateV2);
-        List<Reward> rewards =
-                plugin.getCrateRegistrar().generateCrateRewards(crate, request.getPlayer());
+        List<Reward> rewards = plugin.getCrateRegistrar().generateCrateRewards(crate, request.getPlayer());
         Runnable runnable = () -> {
             crate.onRewards(
                     request.getPlayer(),
@@ -92,8 +100,7 @@ public class OpenCrateComponentImpl implements OpenCrateComponent {
         Set<RewardExecutorResult> rewardResults = new HashSet<>();
 
         /* Give items */
-        Set<GiveItemExecutorResult> itemResults =
-                givePlayerItemsComponent.giveItems(reward.getItems(), player);
+        Set<GiveItemExecutorResult> itemResults = givePlayerItemsComponent.giveItems(reward.getItems(), player);
         transferItemResults(itemResults, rewardResults);
 
         /* Run commands */

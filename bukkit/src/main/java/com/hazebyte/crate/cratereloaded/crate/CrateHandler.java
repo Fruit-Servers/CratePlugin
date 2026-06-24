@@ -13,6 +13,7 @@ import com.hazebyte.crate.cratereloaded.component.PluginSettingComponent;
 import com.hazebyte.crate.cratereloaded.component.PreviewCrateComponent;
 import com.hazebyte.crate.cratereloaded.component.SupplyChestCreateComponent;
 import com.hazebyte.crate.cratereloaded.component.model.CrateOpenRequest;
+import com.hazebyte.crate.cratereloaded.component.model.CrateOpenResponse;
 import com.hazebyte.crate.cratereloaded.menu.Size;
 import com.hazebyte.crate.cratereloaded.menu.pages.ConfirmationPage;
 import com.hazebyte.crate.cratereloaded.menu.pages.CratesPreviewPage;
@@ -26,12 +27,6 @@ import com.hazebyte.crate.cratereloaded.util.MoreObjects;
 import com.hazebyte.crate.cratereloaded.util.PlayerUtil;
 import com.hazebyte.crate.cratereloaded.util.item.ItemUtil;
 import com.hazebyte.crate.utils.NumberGenerator;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -43,6 +38,11 @@ import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class CrateHandler implements CrateRegistrar {
 
@@ -286,8 +286,7 @@ public class CrateHandler implements CrateRegistrar {
             return;
         }
         if (crateV2.getItem() == null) {
-            throw new IllegalArgumentException(
-                    "Missing activation item in CrateV2: " + crateV2.getCrateName());
+            throw new IllegalArgumentException("Missing activation item in CrateV2: " + crateV2.getCrateName());
         }
 
         // Add to V2 storage
@@ -360,16 +359,18 @@ public class CrateHandler implements CrateRegistrar {
         CrateOpenRequest request = CrateOpenRequest.builder()
                 .player(player)
                 .location(location)
-                .crate(crate)           // Legacy (for backwards compatibility)
-                .crateV2(crateV2)       // V2 (primary)
+                .crate(crate) // Legacy (for backwards compatibility)
+                .crateV2(crateV2) // V2 (primary)
                 .build();
+        CrateOpenResponse response;
         if (crate.getType() == CrateType.SUPPLY) {
-            supplyComponent.createChest(request);
+            response = supplyComponent.createChest(request);
         } else {
-            openComponent.openCrate(request);
+            response = openComponent.openCrate(request);
         }
 
-        if (shouldRemoveItem) {
+        // Rejected opens (player already mid-animation) must not consume the key
+        if (shouldRemoveItem && response.isOpened()) {
             if (player.getGameMode() == GameMode.CREATIVE && crate.getType() == CrateType.KEY) {
                 PlayerUtil.removeOneFromHandOrInv(player, itemToRemove);
             } else {
@@ -409,10 +410,7 @@ public class CrateHandler implements CrateRegistrar {
             if (crates.size() == 1) {
                 preview(crates.get(0), player);
             } else {
-                int size = crates.size()
-                        + (settings.isMenuInteractionEnabled()
-                                ? Size.ONE_LINE.getSize()
-                                : 0);
+                int size = crates.size() + (settings.isMenuInteractionEnabled() ? Size.ONE_LINE.getSize() : 0);
                 CratesPreviewPage page = new CratesPreviewPage(crates, Size.fit(size), settings);
                 page.open(player);
             }
@@ -422,9 +420,7 @@ public class CrateHandler implements CrateRegistrar {
     @Override
     public boolean purchase(Crate crate, Player player, int amount) {
         double cost = amount * crate.getCost();
-        boolean success = plugin.getEconomyProvider()
-                .withdraw(player, cost)
-                .transactionSuccess();
+        boolean success = plugin.getEconomyProvider().withdraw(player, cost).transactionSuccess();
         if (success) {
             giveCrate(crate, player, amount);
             return true;

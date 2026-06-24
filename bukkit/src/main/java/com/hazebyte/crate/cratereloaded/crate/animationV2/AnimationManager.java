@@ -34,7 +34,8 @@ public class AnimationManager {
     private final ClaimExecutor claimExecutor;
     private final Map<UUID, AnimationExecution> ongoingAnimations;
 
-    public AnimationManager(@NonNull JavaPlugin plugin, @NonNull CorePlugin corePlugin, @NonNull ClaimExecutor claimExecutor) {
+    public AnimationManager(
+            @NonNull JavaPlugin plugin, @NonNull CorePlugin corePlugin, @NonNull ClaimExecutor claimExecutor) {
         this.plugin = plugin;
         this.corePlugin = corePlugin;
         this.claimExecutor = claimExecutor;
@@ -52,7 +53,9 @@ public class AnimationManager {
                                                 Player player = Bukkit.getPlayer(uuid);
                                                 return player == null
                                                         || !player.isOnline()
-                                                        || ongoingAnimations.get(uuid).isCancelled();
+                                                        || ongoingAnimations
+                                                                .get(uuid)
+                                                                .isCancelled();
                                             })
                                             .forEach(ongoingAnimations::remove);
                         },
@@ -60,20 +63,22 @@ public class AnimationManager {
                         FIVE_MINUTES_TICKS);
     }
 
-    public void startAnimation(@NonNull Animation animation) {
+    // False when the player is already animating, so the caller can reject and skip the key
+    public boolean startAnimation(@NonNull Animation animation) {
         UUID playerId = animation.getPlayer().getUniqueId();
         if (ongoingAnimations.containsKey(playerId)) {
             AnimationExecution animationExecution = ongoingAnimations.get(playerId);
             if (animationExecution.isCancelled()) {
                 ongoingAnimations.remove(playerId);
             } else {
-                throw new RuntimeException("Player already has an ongoing animation");
+                return false;
             }
         }
 
         AnimationExecution animationExecution = new AnimationExecution(animation);
         animationExecution.runTaskTimer(plugin, 0L, 1L);
         ongoingAnimations.put(playerId, animationExecution);
+        return true;
     }
 
     public void onInventoryClose(@NonNull InventoryCloseEvent event) {
@@ -101,7 +106,8 @@ public class AnimationManager {
             Bukkit.getScheduler()
                     .runTaskLater(
                             corePlugin,
-                            () -> corePlugin.getJavaPluginComponent()
+                            () -> corePlugin
+                                    .getJavaPluginComponent()
                                     .getInventoryManager()
                                     .openInventory(animationExecution.getInventoryV2(), player),
                             1L);
@@ -152,7 +158,8 @@ public class AnimationManager {
     }
 
     public void onFrameChange(@NonNull AnimationFrameChangeEvent event) {
-        val crate = corePlugin.getCrateRegistrar()
+        val crate = corePlugin
+                .getCrateRegistrar()
                 .getCrate(event.getAnimation().getCrateV2().getCrateName());
         val player = event.getAnimation().getPlayer();
         if (event.getCurrentFrameIndex() == event.getAnimation().getFrames().size()) {

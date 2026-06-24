@@ -53,7 +53,6 @@ import static com.hazebyte.crate.cratereloaded.util.ConfigConstants.SIMPLE_BYPAS
 import static com.hazebyte.crate.cratereloaded.util.ConfigConstants.WHITE_PANE_GLASS;
 
 import com.hazebyte.crate.api.util.Messenger;
-import com.hazebyte.crate.cratereloaded.CorePlugin;
 import com.hazebyte.crate.cratereloaded.component.PluginSettingComponent;
 import com.hazebyte.crate.cratereloaded.model.Config;
 import com.hazebyte.crate.cratereloaded.util.item.ItemParser;

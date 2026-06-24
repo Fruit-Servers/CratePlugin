@@ -20,7 +20,8 @@ public class ConfirmationPage extends Menu implements Itemable {
     private final boolean requiresCheck;
     private final PluginSettingComponent settings;
 
-    public ConfirmationPage(Crate crate, Location location, ItemStack item, boolean requiresCheck, PluginSettingComponent settings) {
+    public ConfirmationPage(
+            Crate crate, Location location, ItemStack item, boolean requiresCheck, PluginSettingComponent settings) {
         super(CorePlugin.getPlugin(), settings.getConfirmationMenuName(), Size.FIVE_LINE);
         this.crate = crate;
         this.location = location;

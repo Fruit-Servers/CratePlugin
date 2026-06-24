@@ -71,7 +71,7 @@ body:
     attributes:
       label: CrateReloaded Version
       description: What version of CrateReloaded are you using?
-      placeholder: "2.3.16"
+      placeholder: "2.3.17"
     validations:
       required: true
 

@@ -19,7 +19,8 @@ public class CrateSerialization {
         serializedMap.put("animation", crate.getAnimationType().name());
         serializedMap.put("end-animation", crate.getEndAnimationType().name());
         serializedMap.put("display-name", crate.getDisplayName().replace("§", "&"));
-        serializedMap.put("holographic", crate.getHolographicText());
+        serializedMap.put("holographic-text", crate.getHolographicText());
+        serializedMap.put("display-item", ItemParser.serialize(crate.getDisplayItem()));
 
         Map<String, Object> preview = new LinkedHashMap<>();
         preview.put("enabled", crate.isPreviewable());

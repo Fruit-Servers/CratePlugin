@@ -158,6 +158,7 @@ class CrateMapperTest {
                 .confirmBeforeUse(CONFIRM_BEFORE_USE)
                 .displayName(Optional.of(DISPLAY_NAME))
                 .displayItem(Optional.of(DISPLAY_ITEM))
+                .previewable(CAN_PREVIEW)
                 .previewRows(PREVIEW_ROWS)
                 .acceptButton(ACCEPT_BUTTON)
                 .declineButton(DECLINE_BUTTON)

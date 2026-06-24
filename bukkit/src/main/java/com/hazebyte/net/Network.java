@@ -34,9 +34,8 @@ public class Network {
             connection.setRequestMethod(method);
 
             int status = connection.getResponseCode();
-            try (InputStreamReader streamReader =
-                            new InputStreamReader(
-                                    status > 299 ? connection.getErrorStream() : connection.getInputStream());
+            try (InputStreamReader streamReader = new InputStreamReader(
+                            status > 299 ? connection.getErrorStream() : connection.getInputStream());
                     BufferedReader reader = new BufferedReader(streamReader)) {
                 StringBuffer buffer = new StringBuffer();
                 String line;
@@ -48,10 +47,7 @@ public class Network {
         } catch (Exception ex) {
             CorePlugin.getPlugin()
                     .getLogger()
-                    .log(
-                            Level.WARNING,
-                            "Failed to perform HTTP " + method + " request to " + website,
-                            ex);
+                    .log(Level.WARNING, "Failed to perform HTTP " + method + " request to " + website, ex);
             return null;
         } finally {
             if (connection != null) {

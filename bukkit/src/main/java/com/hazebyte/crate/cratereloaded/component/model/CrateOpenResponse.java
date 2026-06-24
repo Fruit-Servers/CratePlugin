@@ -7,4 +7,9 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 @Data
-public class CrateOpenResponse {}
+public class CrateOpenResponse {
+
+    // False when the open was rejected so the caller skips consuming the key
+    @Builder.Default
+    private boolean opened = true;
+}

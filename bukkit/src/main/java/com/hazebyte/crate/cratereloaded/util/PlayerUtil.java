@@ -42,7 +42,9 @@ public class PlayerUtil {
                         "getItemInOffHand", classCache.get("PlayerInventory").getMethod("getItemInOffHand"));
                 methodCache.put("getHand", classCache.get("PlayerInteractEvent").getMethod("getHand"));
             } catch (NoSuchMethodException e) {
-                CorePlugin.getPlugin().getLogger().log(Level.SEVERE, "Failed to initialize reflection methods for 1.9+ inventory support", e);
+                CorePlugin.getPlugin()
+                        .getLogger()
+                        .log(Level.SEVERE, "Failed to initialize reflection methods for 1.9+ inventory support", e);
             }
         }
     }
@@ -105,7 +107,9 @@ public class PlayerUtil {
                 contents = (ItemStack[]) methodCache.get("getStorageContents").invoke(inventory);
                 return (int) Arrays.stream(contents).filter(e -> e == null).count();
             } catch (Exception e) {
-                CorePlugin.getPlugin().getLogger().log(Level.WARNING, "Failed to get storage contents for player inventory", e);
+                CorePlugin.getPlugin()
+                        .getLogger()
+                        .log(Level.WARNING, "Failed to get storage contents for player inventory", e);
                 return -1;
             }
         }

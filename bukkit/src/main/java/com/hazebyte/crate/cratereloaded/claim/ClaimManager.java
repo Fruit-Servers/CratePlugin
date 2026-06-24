@@ -4,7 +4,6 @@ import com.hazebyte.crate.api.claim.Claim;
 import com.hazebyte.crate.api.claim.ClaimRegistrar;
 import com.hazebyte.crate.api.crate.Crate;
 import com.hazebyte.crate.api.crate.reward.Reward;
-import com.hazebyte.crate.cratereloaded.CorePlugin;
 import com.hazebyte.crate.cratereloaded.claim.storage.ClaimStorage;
 import com.hazebyte.crate.cratereloaded.claim.storage.yaml.YamlClaimStorage;
 import com.hazebyte.crate.cratereloaded.component.PluginSettingComponent;
@@ -31,7 +30,10 @@ public class ClaimManager implements ClaimRegistrar {
     private final ClaimExecutor claimExecutor;
     private final PluginSettingComponent settings;
 
-    public ClaimManager(@NonNull JavaPlugin plugin, @NonNull ClaimExecutor claimExecutor, @NonNull PluginSettingComponent settings) {
+    public ClaimManager(
+            @NonNull JavaPlugin plugin,
+            @NonNull ClaimExecutor claimExecutor,
+            @NonNull PluginSettingComponent settings) {
         this.plugin = plugin;
         this.claimStorage = new YamlClaimStorage(plugin, claimExecutor);
         this.claimExecutor = claimExecutor;
@@ -110,7 +112,8 @@ public class ClaimManager implements ClaimRegistrar {
                 .exceptionally(throwable -> {
                     plugin.getLogger().severe("Failed to spoof claim inventory: " + throwable.getMessage());
                     if (throwable.getCause() != null) {
-                        plugin.getLogger().severe("Caused by: " + throwable.getCause().getMessage());
+                        plugin.getLogger()
+                                .severe("Caused by: " + throwable.getCause().getMessage());
                     }
                     return null;
                 });

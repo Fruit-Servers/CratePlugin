@@ -47,7 +47,7 @@ body:
       placeholder: |
         Minecraft version: 1.19.2
         Server software: Paper
-        CrateReloaded version: 2.3.16
+        CrateReloaded version: 2.3.17
 
         Relevant configuration snippets:
         ```yaml

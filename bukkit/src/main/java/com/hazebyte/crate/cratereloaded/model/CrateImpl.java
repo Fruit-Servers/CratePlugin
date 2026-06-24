@@ -18,12 +18,6 @@ import com.hazebyte.crate.cratereloaded.crate.animation.end.BlankEnding;
 import com.hazebyte.crate.cratereloaded.crate.animation.end.BlankWheelEnding;
 import com.hazebyte.crate.cratereloaded.crate.animation.end.RandomEnding;
 import com.hazebyte.crate.cratereloaded.crate.animation.end.RandomWheelEnding;
-import com.hazebyte.crate.cratereloaded.crate.animation.scroller.Csgo;
-import com.hazebyte.crate.cratereloaded.crate.animation.scroller.Heart;
-import com.hazebyte.crate.cratereloaded.crate.animation.scroller.Rectangle;
-import com.hazebyte.crate.cratereloaded.crate.animation.scroller.ReverseCsgo;
-import com.hazebyte.crate.cratereloaded.crate.animation.scroller.ReverseRectangle;
-import com.hazebyte.crate.cratereloaded.crate.animation.scroller.Roulette;
 import com.hazebyte.crate.cratereloaded.provider.effect.EffectWrapper;
 import com.hazebyte.crate.cratereloaded.serialization.CrateSerialization;
 import com.hazebyte.crate.cratereloaded.util.ConfigConstants;
@@ -34,13 +28,6 @@ import com.hazebyte.crate.cratereloaded.util.format.CustomFormat;
 import com.hazebyte.crate.cratereloaded.util.format.ItemFormatter;
 import com.hazebyte.crate.cratereloaded.util.item.ItemUtil;
 import com.hazebyte.util.Mat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Consumer;
 import lombok.extern.java.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -49,6 +36,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.*;
+import java.util.function.Consumer;
 
 @Log
 public class CrateImpl implements Crate {
@@ -238,7 +228,8 @@ public class CrateImpl implements Crate {
             this.endAnimationType = EndAnimationType.BLANK;
         }
         if (animation != null) {
-            PluginSettingComponent settings = CorePlugin.getJavaPluginComponent().getPluginSettingComponent();
+            PluginSettingComponent settings =
+                    CorePlugin.getJavaPluginComponent().getPluginSettingComponent();
             switch (this.animationType) {
                 case RECTANGLE:
                 case RECTANGLE_REVERSE:
@@ -515,10 +506,19 @@ public class CrateImpl implements Crate {
         }
         List<String> effectKeys = effectCategoryToId.get(category);
         for (String effectKey : effectKeys) {
-            String id = ConfigConstants.generateCrateEffectKey(this, category, effectKey);
+            String legacyId = ConfigConstants.generateCrateEffectKey(this, category, effectKey);
+            String v2Id = ConfigConstants.generateCrateEffectKeyV2(this.getCrateName(), category, effectKey);
+
             Optional<ConfigurationSection> optional = CorePlugin.getJavaPluginComponent()
                     .getEffectServiceComponent()
-                    .getEffectConfiguration(id);
+                    .getEffectConfiguration(legacyId);
+
+            if (!optional.isPresent()) {
+                optional = CorePlugin.getJavaPluginComponent()
+                        .getEffectServiceComponent()
+                        .getEffectConfiguration(v2Id);
+            }
+
             if (!optional.isPresent()) {
                 continue;
             }

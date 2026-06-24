@@ -1,6 +1,5 @@
 package com.hazebyte.crate.cratereloaded.menu.pages;
 
-import com.hazebyte.crate.cratereloaded.CorePlugin;
 import com.hazebyte.crate.cratereloaded.component.PluginSettingComponent;
 import com.hazebyte.crate.cratereloaded.menu.Button;
 import com.hazebyte.crate.cratereloaded.menu.Grid;
@@ -64,27 +63,19 @@ public class PaginationPage extends Menu implements Itemable {
         final int SIZE = this.size.getSize();
         final int NEXT = SIZE - 4, CLOSE = SIZE - 5, PREVIOUS = SIZE - 6;
 
-        this.setItem(
-                CLOSE, new CloseMenuButton(settings.getPreviewCloseButton()));
+        this.setItem(CLOSE, new CloseMenuButton(settings.getPreviewCloseButton()));
 
         if (super.hasParent()) {
-            this.setItem(
-                    PREVIOUS,
-                    new PageButton(
-                            plugin, settings.getPreviewBackButton(), super.getParent()));
+            this.setItem(PREVIOUS, new PageButton(plugin, settings.getPreviewBackButton(), super.getParent()));
         }
         if (super.hasChild()) {
-            this.setItem(
-                    PREVIOUS,
-                    new PageButton(
-                            plugin, settings.getPreviewBackButton(), super.getParent()));
+            this.setItem(PREVIOUS, new PageButton(plugin, settings.getPreviewBackButton(), super.getParent()));
         }
 
         if (this.hasChild()) {
             int index = this.index + SIZE - Grid.ROWS;
             PaginationPage page = new PaginationPage(this, index, queue);
-            PageButton button =
-                    new PageButton(plugin, settings.getPreviewNextButton(), page);
+            PageButton button = new PageButton(plugin, settings.getPreviewNextButton(), page);
             this.setItem(NEXT, button);
 
             page.setParent(this);

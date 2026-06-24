@@ -1,9 +1,6 @@
 package com.hazebyte.crate.cratereloaded.claim.storage.yaml;
 
-import static com.hazebyte.crate.cratereloaded.claim.storage.yaml.YamlClaimConstants.CONFIG_PLAYER_KEY;
-import static com.hazebyte.crate.cratereloaded.claim.storage.yaml.YamlClaimConstants.CONFIG_REWARDS_KEY;
-import static com.hazebyte.crate.cratereloaded.claim.storage.yaml.YamlClaimConstants.CONFIG_TIMESTAMP_KEY;
-import static com.hazebyte.crate.cratereloaded.claim.storage.yaml.YamlClaimConstants.CONFIG_VERSION_KEY;
+import static com.hazebyte.crate.cratereloaded.claim.storage.yaml.YamlClaimConstants.*;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import com.hazebyte.crate.BukkitTest;
@@ -39,7 +36,7 @@ public class V1ToV2Test extends BukkitTest {
     }
 
     @Test
-    public void integrationTest() {
+    public void integrationTest() throws java.io.IOException {
         YamlClaimStorage storage = new YamlClaimStorage(plugin, claimExecutor);
         YamlClaimLineParser parser = new V1YamlClaimLineParser(claimExecutor);
         Config config = storage.getConfig(playerMock);

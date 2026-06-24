@@ -56,8 +56,7 @@ public class Locales {
                 }
             });
         } catch (Exception e) {
-            plugin.getLogger()
-                    .log(java.util.logging.Level.WARNING, "Failed to locate language bundles", e);
+            plugin.getLogger().log(java.util.logging.Level.WARNING, "Failed to locate language bundles", e);
         }
         return bundles;
     }

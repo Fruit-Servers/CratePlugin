@@ -14,14 +14,15 @@ import com.hazebyte.crate.cratereloaded.util.MoreObjects;
 import com.hazebyte.crate.cratereloaded.util.format.CustomFormat;
 import com.hazebyte.crate.cratereloaded.util.format.ItemFormatter;
 import com.hazebyte.util.Mat;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class RewardImpl implements Reward {
 
@@ -239,8 +240,9 @@ public class RewardImpl implements Reward {
 
     @Override
     public boolean hasPostParsing() {
-        return this.line.getRewardString().contains("{random:")
-                || this.line.getRewardString().contains("{random-similar:");
+        String rewardString = this.getLine().getRewardString();
+        return rewardString.contains("{random:")
+                || rewardString.contains("{random-similar:");
     }
 
     @Override

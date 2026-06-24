@@ -35,8 +35,7 @@ public class RewardV2Parser {
      * @param crateName Crate name for error logging
      * @return List of parsed RewardV2 objects
      */
-    public List<RewardV2> parseRewardsFromStringList(
-            @NonNull ConfigurationSection section, @NonNull String crateName) {
+    public List<RewardV2> parseRewardsFromStringList(@NonNull ConfigurationSection section, @NonNull String crateName) {
         List<String> rewardList = section.getStringList("reward.rewards");
         List<RewardV2> rewards = new ArrayList<>();
 
