@@ -30,6 +30,7 @@
       <artifactId>common</artifactId>
     </dependency>
 
+    <!-- GUI/menu framework; binary-only, mirrored under bukkit/repo -->
     <dependency>
       <groupId>com.hazebyte</groupId>
       <artifactId>base</artifactId>
@@ -102,16 +103,30 @@
       <artifactId>CrateReloadedAPI</artifactId>
       <version>2.2.1</version>
     </dependency>
+    <!-- Optional CMI hologram support; compiles against the cmi-stub module, real CMI provides it at runtime -->
     <dependency>
       <groupId>com.hazebyte.lib</groupId>
       <artifactId>cmi</artifactId>
       <version>8.7.8.2</version>
       <scope>provided</scope>
     </dependency>
+    <!-- Server-supplied libraries the plugin compiles against -->
     <dependency>
-      <groupId>com.hazebyte.lib</groupId>
-      <artifactId>craftbukkit112</artifactId>
-      <version>1.0.0</version>
+      <groupId>com.googlecode.json-simple</groupId>
+      <artifactId>json-simple</artifactId>
+      <version>1.1.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.6</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.mojang</groupId>
+      <artifactId>authlib</artifactId>
+      <version>1.5.21</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -133,6 +148,21 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <!-- File-based repo (bukkit/repo) holding the binary-only com.hazebyte:base jar -->
+  <repositories>
+    <repository>
+      <id>in-project-libs</id>
+      <name>In-project library mirror</name>
+      <url>file://${project.basedir}/repo</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 
   <build>
     <finalName>${parent.artifactId}-bukkit-${project.version}</finalName>

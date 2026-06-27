@@ -11,10 +11,10 @@ package:
 	mvn package
 
 lint:
-	mvn -pl '!utils,!api' spotless:check
+	mvn -pl '!utils,!api,!effectlib,!cmi-stub' spotless:check
 
 lint-fix:
-	mvn -pl '!utils,!api' spotless:apply
+	mvn -pl '!utils,!api,!effectlib,!cmi-stub' spotless:apply
 
 version:
 	mvn versions:set

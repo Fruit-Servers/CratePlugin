@@ -16,6 +16,8 @@
     <module>api</module>
     <module>utils</module>
     <module>common</module>
+    <module>effectlib</module>
+    <module>cmi-stub</module>
   </modules>
 
   <properties>
@@ -28,12 +30,6 @@
   </properties>
 
   <repositories>
-    <!-- Repository order is intentional: resolve EffectLib 10.3 from Hazebyte before Aikar. -->
-    <repository>
-      <id>hazebyte</id>
-      <name>Hazebyte</name>
-      <url>https://m2.hazebyte.com/repository/maven_releases/</url>
-    </repository>
     <repository>
       <id>aikar</id>
       <name>ACF - https://github.com/aikar/commands</name>
@@ -61,6 +57,12 @@
     <repository>
       <id>jitpack.io</id>
       <url>https://jitpack.io</url>
+    </repository>
+    <!-- com.mojang:authlib -->
+    <repository>
+      <id>minecraft-libraries</id>
+      <name>Minecraft Libraries</name>
+      <url>https://libraries.minecraft.net/</url>
     </repository>
   </repositories>
 
