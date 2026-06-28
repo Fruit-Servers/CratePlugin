@@ -4,7 +4,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class InventoryMockData {
 
-    private static final int INV_SIZE = 41;
+    // PlayerInventory#getContents() length: 36 storage + 4 armor + 1 offhand + 2 equipment slots.
+    private static final int INV_SIZE = 43;
 
     public static ItemStack[] ONE_STONE_INVENTORY = createMockDataFromItem(ItemStackMockData.ONE_STONE);
     public static ItemStack[] FULL_STONE_INVENTORY = createMockDataFromItem(ItemStackMockData.ONE_INVENTORY_OF_STONE);

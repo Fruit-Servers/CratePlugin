@@ -1,9 +1,9 @@
 package com.hazebyte.crate.test;
 
-import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import com.hazebyte.crate.api.util.ItemBuilder;
 import org.bukkit.Material;
+import org.mockbukkit.mockbukkit.ServerMock;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 public class PlayerMockData {
 

@@ -1,10 +1,12 @@
 package com.hazebyte.crate.api;
 
-import org.bukkit.Bukkit;
-
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Server;
 
 public class ServerVersion implements Comparable<ServerVersion> {
 
@@ -38,7 +40,10 @@ public class ServerVersion implements Comparable<ServerVersion> {
     }
 
     public static boolean isMockServer(String versionString) {
-        return versionString.contains("1.19"); // MockBukkit version
+        // versionString is unused; MockBukkit's version looks real, so check the server class instead.
+        Server server = Bukkit.getServer();
+        return server != null
+                && server.getClass().getName().toLowerCase(Locale.ROOT).contains("mockbukkit");
     }
 
     public boolean isMockServer() {

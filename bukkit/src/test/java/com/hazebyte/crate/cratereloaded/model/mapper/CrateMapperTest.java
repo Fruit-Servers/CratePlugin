@@ -3,8 +3,6 @@ package com.hazebyte.crate.cratereloaded.model.mapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
 import com.hazebyte.crate.api.crate.AnimationType;
 import com.hazebyte.crate.api.crate.CrateType;
 import com.hazebyte.crate.api.crate.EndAnimationType;
@@ -25,6 +23,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -48,7 +48,7 @@ class CrateMapperTest {
     private final int PREVIEW_ROWS = 5;
     private final boolean CONFIRM_BEFORE_USE = true;
     private final ItemStack ACCEPT_BUTTON = new ItemStack(Material.STONE);
-    private final ItemStack DECLINE_BUTTON = new ItemStack(Material.TRIPWIRE);
+    private final ItemStack DECLINE_BUTTON = new ItemStack(Material.STRING);
     private final int MINIMUM_REWARD = 10;
     private final int MAXIMUM_REWARD = 15;
     private final List<Reward> REWARDS = Arrays.asList(

@@ -4,7 +4,6 @@ import static com.hazebyte.crate.test.ItemStackMockData.ONE_INVENTORY_OF_STONE;
 import static com.hazebyte.crate.test.ItemStackMockData.ONE_INVENTORY_OF_STONE_PLUS_ONE_EXTRA;
 import static com.hazebyte.crate.test.ItemStackMockData.ONE_STONE;
 
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import com.hazebyte.crate.BukkitTest;
 import com.hazebyte.crate.api.util.ItemBuilder;
 import com.hazebyte.crate.test.InventoryMockData;
@@ -19,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 public class ItemCalculatorTest extends BukkitTest {
 

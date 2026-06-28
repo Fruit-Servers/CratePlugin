@@ -1,6 +1,5 @@
 package com.hazebyte.crate.cratereloaded.component.impl;
 
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import com.hazebyte.crate.BukkitTest;
 import com.hazebyte.crate.constants.ItemConstants;
 import com.hazebyte.crate.cratereloaded.component.PluginSettingComponent;
@@ -18,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import org.mockito.Mockito;
 
 public class GivePlayerItemsExecutorComponentImplTest extends BukkitTest {
