@@ -1,75 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>crate</artifactId>
-    <groupId>com.hazebyte</groupId>
-    <version>2.3.17</version>
-  </parent>
 
-  <!-- Locally-maintained fork of elBukkit/EffectLib 10.3 (MIT): adds OriginalEffect, FireworkEffect
-       and per-effect tweaks. Coordinates match the upstream artifact so bukkit's dependency/shade
-       resolve it from the reactor. See LICENSE for attribution. -->
+  <!-- In-tree fork of elBukkit/EffectLib (MIT): the EffectLib core plus a Compatibility layer of
+       version-specific particle backends. The core compiles against the 26.x API, isolated from the
+       reactor's other provided deps. See LICENSE for attribution. -->
   <groupId>com.elmakers.mine.bukkit</groupId>
-  <artifactId>EffectLib</artifactId>
-  <version>10.3</version>
+  <artifactId>EffectLib-parent</artifactId>
+  <version>11.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
 
-  <name>EffectLib</name>
+  <name>EffectLib-parent</name>
   <description>Particle effect library for Bukkit (fork, maintained in-tree for CrateReloaded).</description>
 
-  <dependencies>
-    <!-- elMakers' exp4j fork: adds net.objecthunter.exp4j.VariableProvider, which EquationTransform
-         needs and stock exp4j lacks. Shaded in (relocated to de.slikey.exp4j) below. -->
-    <dependency>
-      <groupId>com.elmakers.math</groupId>
-      <artifactId>exp4j</artifactId>
-      <version>1.0</version>
-      <exclusions>
-        <exclusion>
-          <groupId>junit</groupId>
-          <artifactId>junit</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-  </dependencies>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>25</maven.compiler.source>
+    <maven.compiler.target>25</maven.compiler.target>
+  </properties>
+
+  <modules>
+    <module>Compatibility</module>
+    <module>EffectLib</module>
+  </modules>
+
+  <repositories>
+    <repository>
+      <id>spigot</id>
+      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+    </repository>
+    <repository>
+      <id>papermc</id>
+      <url>https://repo.papermc.io/repository/maven-public/</url>
+    </repository>
+    <!-- com.elmakers.math:exp4j (elMakers' exp4j fork) is published only here, not on Maven Central. -->
+    <repository>
+      <id>aikar</id>
+      <url>https://repo.aikar.co/content/groups/aikar/</url>
+    </repository>
+  </repositories>
 
   <build>
-    <finalName>${project.artifactId}-${project.version}</finalName>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-      </plugin>
-      <!-- Bundle exp4j, relocated net.objecthunter.exp4j -> de.slikey.exp4j; the bukkit shade then
-           relocates the whole de.slikey tree, so exp4j follows along. -->
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.6.2</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <createDependencyReducedPom>false</createDependencyReducedPom>
-              <artifactSet>
-                <includes>
-                  <include>com.elmakers.math:exp4j</include>
-                </includes>
-              </artifactSet>
-              <relocations>
-                <relocation>
-                  <pattern>net.objecthunter.exp4j</pattern>
-                  <shadedPattern>de.slikey.exp4j</shadedPattern>
-                </relocation>
-              </relocations>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.14.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>3.6.2</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 </project>
