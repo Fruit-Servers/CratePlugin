@@ -39,13 +39,19 @@ public class CrateCommandManager extends BukkitCommandManager {
     private void registerCompletion(CorePlugin plugin) {
         getCommandCompletions()
                 .registerCompletion("AvailableCrateAtLocation", new RegisteredCrateFromCameraCompletion());
-        getCommandCompletions().registerCompletion("crates", (c) -> (plugin.getCrateRegistrar().getCrates().stream()
-                .map(crate -> crate.getCrateName())
-                .collect(Collectors.toSet())));
-        getCommandCompletions().registerCompletion("keys", (c) -> (plugin.getCrateRegistrar().getCrates().stream()
-                .filter(crate -> crate.getType() == CrateType.KEY)
-                .map(crate -> crate.getCrateName())
-                .collect(Collectors.toSet())));
+        getCommandCompletions()
+                .registerCompletion(
+                        "crates",
+                        (c) -> (plugin.getCrateRegistrar().getCrates().stream()
+                                .map(crate -> crate.getCrateName())
+                                .collect(Collectors.toSet())));
+        getCommandCompletions()
+                .registerCompletion(
+                        "keys",
+                        (c) -> (plugin.getCrateRegistrar().getCrates().stream()
+                                .filter(crate -> crate.getType() == CrateType.KEY)
+                                .map(crate -> crate.getCrateName())
+                                .collect(Collectors.toSet())));
         getCommandCompletions().registerCompletion("status", (c) -> Arrays.asList("online", "offline"));
         getCommandCompletions().registerCompletion("target", new PlayerCameraCoordinateCompletion());
     }

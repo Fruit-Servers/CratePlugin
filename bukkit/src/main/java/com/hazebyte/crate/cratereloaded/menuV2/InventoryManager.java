@@ -56,8 +56,11 @@ public class InventoryManager {
         InventoryV2 inventoryV2 = inventoryMap.get(event.getInventory());
         Player player = (Player) event.getPlayer();
         if (inventoryV2 != null) {
-            inventoryV2.getButtons().entrySet().stream().forEach(entry -> event.getInventory()
-                    .setItem(entry.getKey(), entry.getValue().getItemCreator().apply(player)));
+            inventoryV2.getButtons().entrySet().stream()
+                    .forEach(entry -> event.getInventory()
+                            .setItem(
+                                    entry.getKey(),
+                                    entry.getValue().getItemCreator().apply(player)));
         }
     }
 

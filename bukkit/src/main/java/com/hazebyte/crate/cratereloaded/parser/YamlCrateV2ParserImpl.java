@@ -16,14 +16,13 @@ import com.hazebyte.crate.cratereloaded.util.format.CustomFormat;
 import com.hazebyte.crate.cratereloaded.util.item.ItemParser;
 import com.hazebyte.crate.cratereloaded.validation.CrateValidatorImpl;
 import com.hazebyte.crate.validation.ValidationResult;
+import java.util.*;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.util.*;
 
 /**
  * Parses YAML crate configurations directly into CrateV2 data models.

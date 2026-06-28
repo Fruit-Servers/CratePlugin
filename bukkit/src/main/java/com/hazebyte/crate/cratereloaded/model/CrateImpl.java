@@ -28,6 +28,8 @@ import com.hazebyte.crate.cratereloaded.util.format.CustomFormat;
 import com.hazebyte.crate.cratereloaded.util.format.ItemFormatter;
 import com.hazebyte.crate.cratereloaded.util.item.ItemUtil;
 import com.hazebyte.util.Mat;
+import java.util.*;
+import java.util.function.Consumer;
 import lombok.extern.java.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -36,9 +38,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.*;
-import java.util.function.Consumer;
 
 @Log
 public class CrateImpl implements Crate {

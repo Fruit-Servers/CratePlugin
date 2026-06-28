@@ -42,15 +42,19 @@ public class InventoryButtonsV2 {
     }
 
     public static InventoryButtonV2 createPreviousPageButton(@NonNull InventoryV2 inventoryV2) {
-        return createPageNavigationButton(inventoryV2, (player) -> new ItemBuilder(Mat.OAK_FENCE_GATE.toMaterial())
-                .displayName(String.format(PREVIOUS_PAGE_BUTTON_NAME_FORMAT, ChatColor.YELLOW))
-                .asItemStack());
+        return createPageNavigationButton(
+                inventoryV2,
+                (player) -> new ItemBuilder(Mat.OAK_FENCE_GATE.toMaterial())
+                        .displayName(String.format(PREVIOUS_PAGE_BUTTON_NAME_FORMAT, ChatColor.YELLOW))
+                        .asItemStack());
     }
 
     public static InventoryButtonV2 createNextPageButton(@NonNull InventoryV2 inventoryV2) {
-        return createPageNavigationButton(inventoryV2, (player) -> new ItemBuilder(Mat.OAK_FENCE_GATE.toMaterial())
-                .displayName(String.format(NEXT_PAGE_BUTTON_NAME_FORMAT, ChatColor.GREEN))
-                .asItemStack());
+        return createPageNavigationButton(
+                inventoryV2,
+                (player) -> new ItemBuilder(Mat.OAK_FENCE_GATE.toMaterial())
+                        .displayName(String.format(NEXT_PAGE_BUTTON_NAME_FORMAT, ChatColor.GREEN))
+                        .asItemStack());
     }
 
     public static InventoryButtonV2 createNotImplementedButton() {

@@ -1,3 +1,5 @@
+# Requires JDK 25. If your default `java` differs: export JAVA_HOME=$(/usr/libexec/java_home -v 25)
+
 START:
 	$(MAKE) build
 

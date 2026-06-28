@@ -11,13 +11,12 @@ import com.hazebyte.crate.cratereloaded.provider.effect.slikey.SlikeyEffectNames
 import com.hazebyte.crate.cratereloaded.util.LocationUtil;
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
+import java.util.*;
+import java.util.logging.Level;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.*;
-import java.util.logging.Level;
 
 public class EffectServiceComponentImpl extends EffectManager implements EffectServiceComponent {
 
@@ -99,8 +98,7 @@ public class EffectServiceComponentImpl extends EffectManager implements EffectS
                     msg.append(".");
 
                     if (!availableEffects.isEmpty()) {
-                        msg.append(" Available built-in effects: ")
-                                .append(String.join(", ", availableEffects));
+                        msg.append(" Available built-in effects: ").append(String.join(", ", availableEffects));
                     }
 
                     plugin.getLogger().warning(msg.toString());
@@ -114,8 +112,9 @@ public class EffectServiceComponentImpl extends EffectManager implements EffectS
             try {
                 category = Category.valueOf(categoryClass.toUpperCase(Locale.ROOT));
             } catch (IllegalArgumentException ex) {
-                plugin.getLogger().warning("Invalid effect category '" + categoryClass + "' for effect '" + effectClass +
-                        "' at '" + configurationSection.getCurrentPath() + "'.");
+                plugin.getLogger()
+                        .warning("Invalid effect category '" + categoryClass + "' for effect '" + effectClass + "' at '"
+                                + configurationSection.getCurrentPath() + "'.");
                 return Optional.empty();
             }
 
@@ -126,11 +125,12 @@ public class EffectServiceComponentImpl extends EffectManager implements EffectS
             SlikeyEffect slikeyEffect = new SlikeyEffect(effect);
             return Optional.of(slikeyEffect);
         } catch (Exception e) {
-            plugin.getLogger().log(
-                    Level.WARNING,
-                    "Failed to create effect '" + effectClass + "' at '" + configurationSection.getCurrentPath() + "'",
-                    e
-            );
+            plugin.getLogger()
+                    .log(
+                            Level.WARNING,
+                            "Failed to create effect '" + effectClass + "' at '" + configurationSection.getCurrentPath()
+                                    + "'",
+                            e);
             return Optional.empty();
         }
     }
