@@ -314,7 +314,7 @@ public class FilePluginSettingComponentImpl implements PluginSettingComponent {
     }
 
     public String getHologramPluginPreference() {
-        return retrieveAndCacheKey(PLUGIN_HOLOGRAM_PREFERENCE_KEY, "HolographicDisplays", true, Function.identity());
+        return retrieveAndCacheKey(PLUGIN_HOLOGRAM_PREFERENCE_KEY, "DecentHolograms", true, Function.identity());
     }
 
     public Calendar getCalendar() {
