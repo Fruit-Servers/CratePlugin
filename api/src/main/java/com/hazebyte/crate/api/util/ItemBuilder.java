@@ -1,12 +1,5 @@
 package com.hazebyte.crate.api.util;
 
-import com.hazebyte.crate.api.ServerVersion;
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +10,13 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import com.hazebyte.crate.api.ServerVersion;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class ItemBuilder {
 
@@ -236,7 +236,8 @@ public class ItemBuilder {
 
   public ItemBuilder setGlowing(boolean glowing) {
     if (glowing) {
-      unsafeEnchant(itemStack.getType() != Material.BOW ? Enchantment.ARROW_INFINITE : Enchantment.LUCK, 10);
+      unsafeEnchant(
+          itemStack.getType() != Material.FISHING_ROD ? Enchantment.LURE : Enchantment.SILK_TOUCH, 10);
       flag(ItemFlag.HIDE_ENCHANTS);
     }
     return this;

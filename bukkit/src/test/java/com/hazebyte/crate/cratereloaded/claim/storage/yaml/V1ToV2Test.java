@@ -2,7 +2,6 @@ package com.hazebyte.crate.cratereloaded.claim.storage.yaml;
 
 import static com.hazebyte.crate.cratereloaded.claim.storage.yaml.YamlClaimConstants.*;
 
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import com.hazebyte.crate.BukkitTest;
 import com.hazebyte.crate.api.claim.Claim;
 import com.hazebyte.crate.cratereloaded.claim.ClaimExecutor;
@@ -15,6 +14,7 @@ import java.util.logging.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import org.mockito.Mockito;
 
 public class V1ToV2Test extends BukkitTest {

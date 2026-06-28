@@ -1,6 +1,5 @@
 package com.hazebyte.crate.cratereloaded.claim;
 
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import com.hazebyte.crate.BukkitTest;
 import com.hazebyte.crate.api.claim.Claim;
 import com.hazebyte.crate.cratereloaded.model.RewardImpl;
@@ -12,6 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 public class ClaimMessageConsumerTest extends BukkitTest {
     private static final String CORE_CLAIM_HOLD = "core.claim_hold";

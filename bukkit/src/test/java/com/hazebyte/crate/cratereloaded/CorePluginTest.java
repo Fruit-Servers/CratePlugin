@@ -1,13 +1,13 @@
 package com.hazebyte.crate.cratereloaded;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
 import com.hazebyte.crate.cratereloaded.provider.economy.none.NoEconomyProvider;
 import com.hazebyte.crate.cratereloaded.provider.holographic.none.NoHologramProvider;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
 
 public class CorePluginTest {
     private static ServerMock server;

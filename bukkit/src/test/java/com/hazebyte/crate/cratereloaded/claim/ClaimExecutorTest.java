@@ -1,6 +1,5 @@
 package com.hazebyte.crate.cratereloaded.claim;
 
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import com.hazebyte.crate.BukkitTest;
 import com.hazebyte.crate.api.claim.Claim;
 import com.hazebyte.crate.api.crate.reward.Reward;
@@ -15,6 +14,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import org.mockito.Mockito;
 
 public class ClaimExecutorTest extends BukkitTest {
