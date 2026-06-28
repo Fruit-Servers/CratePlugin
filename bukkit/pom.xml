@@ -14,9 +14,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.spigotmc</groupId>
-      <artifactId>spigot-api</artifactId>
-      <version>${spigot.api.version}</version>
+      <groupId>io.papermc.paper</groupId>
+      <artifactId>paper-api</artifactId>
+      <version>${paper.api.version}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -126,7 +126,7 @@
     <dependency>
       <groupId>com.mojang</groupId>
       <artifactId>authlib</artifactId>
-      <version>1.5.21</version>
+      <version>9.0.75</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

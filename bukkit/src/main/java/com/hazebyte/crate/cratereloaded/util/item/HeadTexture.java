@@ -33,7 +33,7 @@ public class HeadTexture {
     public static SkullMeta applyToMeta(@NonNull SkullMeta meta, @NonNull String base64) {
         GameProfile profile = new GameProfile(UUID.randomUUID(), "");
         Property property = new Property("textures", base64);
-        profile.getProperties().put("textures", property);
+        profile.properties().put("textures", property);
 
         if (ServerVersion.getVersion().gte(ServerVersion.v1_18_R0)) {
             setProfileToMeta_gt_1_16(meta, profile);
@@ -95,7 +95,7 @@ public class HeadTexture {
                     return null;
                 }
                 GameProfile profile = (GameProfile) object;
-                PropertyMap map = profile.getProperties();
+                PropertyMap map = profile.properties();
                 Collection<Property> propertyCollection = map.get("textures");
                 Property property = propertyCollection.iterator().next();
                 if (property != null) {
