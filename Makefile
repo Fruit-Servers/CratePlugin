@@ -12,11 +12,12 @@ clean:
 package:
 	mvn package
 
+# Lint only the first-party modules; api/utils/effectlib/cmi-stub are vendored/stub code.
 lint:
-	mvn -pl '!utils,!api,!effectlib,!cmi-stub' spotless:check
+	mvn -pl bukkit,common,nms spotless:check
 
 lint-fix:
-	mvn -pl '!utils,!api,!effectlib,!cmi-stub' spotless:apply
+	mvn -pl bukkit,common,nms spotless:apply
 
 version:
 	mvn versions:set

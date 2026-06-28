@@ -1,0 +1,108 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.elmakers.mine.bukkit</groupId>
+    <artifactId>EffectLib-parent</artifactId>
+    <version>11.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>EffectLib</artifactId>
+
+  <name>EffectLib</name>
+  <description>Particle effect library for Bukkit (fork, maintained in-tree for CrateReloaded).</description>
+
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>http://opensource.org/licenses/mit-license</url>
+    </license>
+  </licenses>
+
+  <dependencies>
+    <!-- Compiled against the 26.1.x server API; FireworkEffect references EntityType.FIREWORK_ROCKET. -->
+    <dependency>
+      <groupId>io.papermc.paper</groupId>
+      <artifactId>paper-api</artifactId>
+      <version>26.1.2.build.72-stable</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- JSR-305 supplies javax.annotation.Nonnull/Nullable (used by Effect); paper-api doesn't bring
+         them transitively. Compile-only — not needed at runtime. -->
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>jsr305</artifactId>
+      <version>3.0.2</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- elMakers' exp4j fork: adds net.objecthunter.exp4j.VariableProvider, which EquationTransform
+         needs and stock exp4j lacks. Shaded in (relocated to de.slikey.exp4j) below. -->
+    <dependency>
+      <groupId>com.elmakers.math</groupId>
+      <artifactId>exp4j</artifactId>
+      <version>1.0</version>
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!-- Version-dispatching particle backends; bundled into the plugin by bukkit's shade. -->
+    <dependency>
+      <groupId>com.elmakers.mine.bukkit.compatibility</groupId>
+      <artifactId>EffectLib-Compatibility-main</artifactId>
+      <version>11.1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>${project.artifactId}-${project.version}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <!-- Bundle only exp4j here (relocated net.objecthunter.exp4j -> de.slikey.exp4j); the Compatibility
+           jars stay separate for bukkit's shade, which then relocates the whole de.slikey tree. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <artifactSet>
+                <includes>
+                  <include>com.elmakers.math:exp4j</include>
+                </includes>
+              </artifactSet>
+              <relocations>
+                <relocation>
+                  <pattern>net.objecthunter.exp4j</pattern>
+                  <shadedPattern>de.slikey.exp4j</shadedPattern>
+                </relocation>
+              </relocations>
+              <filters>
+                <filter>
+                  <artifact>com.elmakers.math:exp4j</artifact>
+                  <excludes>
+                    <exclude>META-INF/MANIFEST.MF</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
