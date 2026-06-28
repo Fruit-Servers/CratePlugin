@@ -68,16 +68,18 @@ public class ClaimManager implements ClaimRegistrar {
 
     @Override
     public CompletableFuture<Optional<Claim>> getClaim(@NonNull OfflinePlayer player, @NonNull UUID uuid) {
-        return getClaims(player).thenApply(claims -> claims.stream()
-                .filter(claim -> uuid.equals(claim.getId()))
-                .findFirst());
+        return getClaims(player)
+                .thenApply(claims -> claims.stream()
+                        .filter(claim -> uuid.equals(claim.getId()))
+                        .findFirst());
     }
 
     @Override
     public CompletableFuture<Collection<Claim>> getClaim(@NonNull OfflinePlayer player, @NonNull long timestamp) {
-        return getClaims(player).thenApply(claims -> claims.stream()
-                .filter(claim -> claim.getTimestamp() == timestamp)
-                .collect(Collectors.toList()));
+        return getClaims(player)
+                .thenApply(claims -> claims.stream()
+                        .filter(claim -> claim.getTimestamp() == timestamp)
+                        .collect(Collectors.toList()));
     }
 
     @Override

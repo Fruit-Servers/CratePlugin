@@ -17,15 +17,14 @@ import com.hazebyte.crate.cratereloaded.provider.holographic.HologramWrapper;
 import com.hazebyte.crate.cratereloaded.util.ConfigConstants;
 import com.hazebyte.crate.cratereloaded.util.LocationUtil;
 import com.hazebyte.crate.cratereloaded.util.MoreObjects;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-
-import javax.inject.Inject;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+import javax.inject.Inject;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 
 public class BlockCrateHandler implements BlockCrateRegistrar {
 

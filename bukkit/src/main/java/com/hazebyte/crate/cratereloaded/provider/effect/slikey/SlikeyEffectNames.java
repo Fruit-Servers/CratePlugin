@@ -18,6 +18,7 @@ import java.util.jar.JarFile;
 public final class SlikeyEffectNames {
 
     private static final String EFFECT_PKG_PATH = "de/slikey/effectlib/effect/";
+
     private SlikeyEffectNames() {}
 
     /**
