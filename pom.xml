@@ -38,11 +38,11 @@
     <repository>
       <id>extendedclip</id>
       <name>Placeholder API - https://www.spigotmc.org/resources/placeholderapi.6245/</name>
-      <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+      <url>https://repo.extendedclip.com/releases/</url>
     </repository>
     <repository>
       <id>codemc</id>
-      <name>Holographic Display - https://github.com/filoghost/HolographicDisplays</name>
+      <name>CodeMC - hosts de.tr7zw:item-nbt-api</name>
       <url>https://repo.codemc.io/repository/maven-public/</url>
     </repository>
     <repository>

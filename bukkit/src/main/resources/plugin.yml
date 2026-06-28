@@ -4,5 +4,5 @@ version: ${project.version}
 authors: [dinosaur, RebornIV]
 website: crate.hazebyte.com
 depend:
-softdepend: [Essentials, Vault, HolographicDisplays, Holograms, Citizens, Multiverse-Core, PlaceholderAPI, CMI, DecentHolograms]
+softdepend: [Essentials, Vault, Holograms, Citizens, Multiverse-Core, PlaceholderAPI, CMI, DecentHolograms]
 api-version: 26.1

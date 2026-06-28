@@ -36,8 +36,8 @@ decimal-format: '#'
 # How long a player has to wait between actions
 cooldown: 1.0
 
-# The plugin to utilize for holograms (HolographicDisplays or CMI)
-hologram-plugin: 'HolographicDisplays'
+# The plugin to utilize for holograms (DecentHolograms or CMI)
+hologram-plugin: 'DecentHolograms'
 
 # Creative Control
 # Prevents players from duplicating keys with creative gamemode.
