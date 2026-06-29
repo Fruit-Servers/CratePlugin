@@ -45,9 +45,9 @@ body:
       label: Additional Context
       description: Any additional information that might help answer your question.
       placeholder: |
-        Minecraft version: 1.19.2
+        Minecraft version: 26.1
         Server software: Paper
-        CrateReloaded version: 2.3.17
+        CrateReloaded version: 2.4.0
 
         Relevant configuration snippets:
         ```yaml

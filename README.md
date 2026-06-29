@@ -2,9 +2,9 @@
 
 [![Build Status](https://github.com/Hazebyte/CrateReloaded/workflows/CI/badge.svg)](https://github.com/Hazebyte/CrateReloaded/actions)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-2.3.16-green.svg)](https://github.com/Hazebyte/CrateReloaded/releases)
+[![Version](https://img.shields.io/badge/version-2.4.0-green.svg)](https://github.com/Hazebyte/CrateReloaded/releases)
 [![Discord](https://img.shields.io/discord/YOUR_DISCORD_ID?label=Discord&logo=discord)](https://discord.gg/0srgnnU1nbB8wMML)
-[![Minecraft](https://img.shields.io/badge/Minecraft-1.8--1.21-orange.svg)](https://www.spigotmc.org/)
+[![Minecraft](https://img.shields.io/badge/Minecraft-26.1-orange.svg)](https://www.spigotmc.org/)
 
 A powerful and flexible crate plugin for Minecraft servers. Create customizable crates with animated openings, varied rewards, and a comprehensive claim system. Perfect for Spigot, Paper, and compatible server software.
 
@@ -23,16 +23,18 @@ A powerful and flexible crate plugin for Minecraft servers. Create customizable 
 
 ### Prerequisites
 
-We recommend using [Jabba](https://github.com/shyiko/jabba) as a Java version manager:
+JDK 25 is required — the build targets Java 25 (class-file major version 69). Install a JDK 25
+(e.g. Temurin 25) and point your shell at it:
 
 ```bash
-# Install Java 17
-jabba install openjdk@1.17
-jabba use
+# macOS
+export JAVA_HOME=$(/usr/libexec/java_home -v 25)
 
 # Verify Java version
-java -version  # Should show Java 17
+java -version  # Should show Java 25
 ```
+
+`.jabbarc` pins `system@1.25` for [Jabba](https://github.com/shyiko/jabba) users.
 
 ### Building from Source
 
@@ -42,12 +44,7 @@ java -version  # Should show Java 17
    cd CrateReloaded
    ```
 
-2. **Initialize git submodules:**
-   ```bash
-   ./scripts/init-project.sh
-   ```
-
-3. **Build the plugin:**
+2. **Build the plugin:**
    ```bash
    # Development build
    make build-dev
@@ -59,7 +56,7 @@ java -version  # Should show Java 17
    make compile
    ```
 
-4. **Find the built JAR:**
+3. **Find the built JAR:**
    - `bukkit/target/CrateReloaded.jar` (both `make` and `make build-dev` produce this shaded jar)
 
 ### Running Tests
