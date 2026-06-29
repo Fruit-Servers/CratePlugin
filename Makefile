@@ -23,9 +23,6 @@ version:
 	mvn versions:set
 	mvn versions:commit
 
-proguard:
-	sh ./scripts/obfuscate.sh
-
 build-package:
 	$(MAKE) package
 
@@ -33,6 +30,7 @@ build-dev:
 	$(MAKE) build-package
 	sh ./scripts/create-dev-jar.sh
 
+# Production build: the shaded, unobfuscated jar. Obfuscation was dropped.
 build:
 	$(MAKE) build-package
-	$(MAKE) proguard
+	sh ./scripts/create-dev-jar.sh

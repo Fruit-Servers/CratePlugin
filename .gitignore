@@ -6,9 +6,6 @@
 # Project Files
 dependency-reduced-pom.xml
 
-# Proguard
-mapping.txt
-
 # Build Files
 target/
 
