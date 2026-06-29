@@ -64,10 +64,6 @@ jobs:
         run: |
           mvn -B package -Dspigot.api.version="${{matrix.spigot-api-version}}" -DskipTests --file pom.xml
 
-      - name: Obfuscate
-        run: |
-          ./scripts/obfuscate.sh
-
       - name: Copy build artifacts
         run: mkdir staging && cp bukkit/target/*.jar staging
 

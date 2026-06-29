@@ -49,10 +49,10 @@ java -version  # Should show Java 17
 
 3. **Build the plugin:**
    ```bash
-   # Development build (no obfuscation)
+   # Development build
    make build-dev
 
-   # Production build (with ProGuard obfuscation)
+   # Production build
    make
 
    # Just compile
@@ -60,8 +60,7 @@ java -version  # Should show Java 17
    ```
 
 4. **Find the built JAR:**
-   - Development: `bukkit/target/CrateReloaded-{version}.jar`
-   - Production: `bin/CrateReloaded-{version}.jar` (after ProGuard)
+   - `bukkit/target/CrateReloaded.jar` (both `make` and `make build-dev` produce this shaded jar)
 
 ### Running Tests
 
