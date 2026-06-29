@@ -224,7 +224,10 @@ public class ItemParser {
         }
 
         if (split[0].equalsIgnoreCase("type")) {
-            potionType = PotionType.valueOf(split[1].toUpperCase());
+            potionType = PotionUtil.matchType(split[1]);
+            if (potionType == null) {
+                Messenger.warning(String.format("Unknown potion type: [%s]", split[1]));
+            }
         } else if (split[0].equalsIgnoreCase("effect")) {
             potionEffectType = Potions.getByName(split[1]);
         } else if (split[0].equalsIgnoreCase("power")) {
@@ -243,15 +246,22 @@ public class ItemParser {
         }
 
         if (isValidPotion(item)) {
-            PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
-            potionEffect =
-                    potionEffectType.createEffect((int) (duration / potionEffectType.getDurationModifier()), power);
-            potionMeta.addCustomEffect(potionEffect, true);
-            item.setItemMeta(potionMeta);
+            if (potionEffectType != null) {
+                PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
+                potionEffect =
+                        potionEffectType.createEffect((int) (duration / potionEffectType.getDurationModifier()), power);
+                potionMeta.addCustomEffect(potionEffect, true);
+                item.setItemMeta(potionMeta);
 
-            if (CorePlugin.getPlugin().getServerVersion().gte(ServerVersion.v1_9_R1)) {
-                PotionUtil potion = PotionUtil.fromItemStack(item);
-                potion.apply(item);
+                if (CorePlugin.getPlugin().getServerVersion().gte(ServerVersion.v1_9_R1)) {
+                    PotionUtil potion = PotionUtil.fromItemStack(item);
+                    potion.apply(item);
+                }
+            } else if (potionType != null) {
+                // A base potion type (e.g. type:SWIFTNESS) without a custom effect.
+                PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
+                potionMeta.setBasePotionType(potionType);
+                item.setItemMeta(potionMeta);
             }
         }
     }

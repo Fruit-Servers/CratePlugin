@@ -45,6 +45,13 @@ public class Potions {
         put("water_breath", PotionEffectType.WATER_BREATHING);
         put("weakness", PotionEffectType.WEAKNESS);
         put("wither", PotionEffectType.WITHER);
+
+        // Pre-1.20.5 constant names Minecraft renamed; kept so configs written before the rename resolve.
+        put("damage_resistance", PotionEffectType.RESISTANCE);
+        put("fast_digging", PotionEffectType.HASTE);
+        put("increase_damage", PotionEffectType.STRENGTH);
+        put("slow", PotionEffectType.SLOWNESS);
+        put("slow_digging", PotionEffectType.MINING_FATIGUE);
     }
 
     private static void put(String name, PotionEffectType effectType) {

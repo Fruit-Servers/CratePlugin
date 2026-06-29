@@ -982,7 +982,7 @@ public enum Mat {
     /**
      * Turns this mat into a material.
      *
-     * @return Material
+     * @return the matching material, or null when no match exists on the running server version
      */
     public Material toMaterial() {
         Material material;
@@ -992,7 +992,7 @@ public enum Mat {
         } else {
             material = Material.matchMaterial(this.alternate);
         }
-        if (material == null) throw new NullPointerException("Unable to find material matching " + this.name());
+        // unresolved legacy entries return null; ItemUtil.get treats that as an invalid material.
         return material;
     }
 

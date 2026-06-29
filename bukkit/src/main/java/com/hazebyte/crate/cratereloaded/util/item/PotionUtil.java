@@ -352,6 +352,39 @@ public class PotionUtil {
     }
 
     /**
+     * Resolves a base {@link PotionType} from a configuration name, translating the pre-1.20.5 names
+     * that Minecraft has since renamed ({@code SPEED} to {@code SWIFTNESS}, {@code JUMP} to
+     * {@code LEAPING}, {@code INSTANT_HEAL} to {@code HEALING}, {@code INSTANT_DAMAGE} to
+     * {@code HARMING}, {@code REGEN} to {@code REGENERATION}, and the removed {@code UNCRAFTABLE} to
+     * {@code WATER}). This keeps crate configs written before 1.20.5 working on modern servers.
+     *
+     * @param name the configured potion type name
+     * @return the matching {@link PotionType}, or {@code null} if the name is not recognised
+     */
+    public static PotionType matchType(String name) {
+        switch (name.toUpperCase()) {
+            case "SPEED":
+                return PotionType.SWIFTNESS;
+            case "JUMP":
+                return PotionType.LEAPING;
+            case "INSTANT_HEAL":
+                return PotionType.HEALING;
+            case "INSTANT_DAMAGE":
+                return PotionType.HARMING;
+            case "REGEN":
+                return PotionType.REGENERATION;
+            case "UNCRAFTABLE":
+                return PotionType.WATER;
+            default:
+                try {
+                    return PotionType.valueOf(name.toUpperCase());
+                } catch (IllegalArgumentException ignored) {
+                    return null;
+                }
+        }
+    }
+
+    /**
      * Returns an instance of {@link PotionBrewer}.
      *
      * @return An instance of PotionBrewer

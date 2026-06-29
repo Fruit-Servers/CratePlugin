@@ -49,6 +49,24 @@ public class Enchantments {
         put("multishot", "MULTSHOT");
         put("piercing", "PIERCING");
         put("quick_charge", "QUICK_CHARGE");
+
+        // Pre-1.20.5 constant names Minecraft renamed; kept so configs written before the rename resolve.
+        put("durability", Enchantment.UNBREAKING);
+        put("dig_speed", Enchantment.EFFICIENCY);
+        put("damage_all", Enchantment.SHARPNESS);
+        put("damage_undead", Enchantment.SMITE);
+        put("damage_arthropods", Enchantment.BANE_OF_ARTHROPODS);
+        put("loot_bonus_blocks", Enchantment.FORTUNE);
+        put("loot_bonus_mobs", Enchantment.LOOTING);
+        put("arrow_damage", Enchantment.POWER);
+        put("arrow_knockback", Enchantment.PUNCH);
+        put("arrow_fire", Enchantment.FLAME);
+        put("arrow_infinite", Enchantment.INFINITY);
+        put("protection_environmental", Enchantment.PROTECTION);
+        put("protection_fire", Enchantment.FIRE_PROTECTION);
+        put("protection_fall", Enchantment.FEATHER_FALLING);
+        put("protection_explosions", Enchantment.BLAST_PROTECTION);
+        put("protection_projectile", Enchantment.PROJECTILE_PROTECTION);
     }
 
     private static void put(String name, Enchantment enchant) {
