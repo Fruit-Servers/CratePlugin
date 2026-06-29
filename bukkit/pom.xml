@@ -188,6 +188,8 @@
               <include>org.bstats</include>
               <include>com.google.dagger</include>
               <include>javax.inject</include>
+              <!-- Dagger 2.60's generated components reference jakarta.inject.Provider. -->
+              <include>jakarta.inject:jakarta.inject-api</include>
               <include>org.mapstruct:mapstruct</include>
               <include>de.tr7zw:item-nbt-api</include>
             </includes>
@@ -212,6 +214,10 @@
             <relocation>
               <pattern>javax.inject</pattern>
               <shadedPattern>com.hazebyte.libs.javax.inject</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>jakarta.inject</pattern>
+              <shadedPattern>com.hazebyte.libs.jakarta.inject</shadedPattern>
             </relocation>
             <relocation>
               <pattern>org.mapstruct</pattern>

@@ -3,6 +3,7 @@ package com.hazebyte.crate.api;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
@@ -12,8 +13,8 @@ public class ServerVersion implements Comparable<ServerVersion> {
 
     private static final Map<String, ServerVersion> versions = new HashMap<>();
 
-    private static final Pattern numberPattern = Pattern.compile("[0-9]+.[0-9]+.[0-9]+");
-    private static final Pattern altNumberPattern = Pattern.compile("[0-9]+.[0-9]+");
+    // Leading numeric core (major.minor[.revision]); trailing build suffixes like "26.1.2.build.72" are ignored.
+    private static final Pattern versionPattern = Pattern.compile("(\\d+)\\.(\\d+)(?:\\.(\\d+))?");
 
     public static ServerVersion v1_8_R1 = new ServerVersion(1, 8, 1);
     public static ServerVersion v1_8_R2 = new ServerVersion(1, 8, 2);
@@ -59,21 +60,16 @@ public class ServerVersion implements Comparable<ServerVersion> {
             return ServerVersion.SERVER_MOCK;
         }
 
-        if (!altNumberPattern.matcher(versionString).matches() &&
-            !numberPattern.matcher(versionString).matches())
-            throw new IllegalArgumentException(String.format("Unable to parse server version: [%s]", versionString));
-
         if (versions.containsKey(versionString))
             return versions.get(versionString);
 
-        String[] parts = versionString.split("\\.");
+        Matcher matcher = versionPattern.matcher(versionString);
+        if (!matcher.lookingAt())
+            throw new IllegalArgumentException(String.format("Unable to parse server version: [%s]", versionString));
 
-        int major = Integer.parseInt(parts[0]);
-        int minor = Integer.parseInt(parts[1]);
-        int revision = 0;
-        if (parts.length > 2) {
-            revision = Integer.parseInt(parts[2]);
-        }
+        int major = Integer.parseInt(matcher.group(1));
+        int minor = Integer.parseInt(matcher.group(2));
+        int revision = matcher.group(3) != null ? Integer.parseInt(matcher.group(3)) : 0;
 
         ServerVersion version = new ServerVersion(major, minor, revision);
         versions.put(versionString, version);
@@ -84,7 +80,7 @@ public class ServerVersion implements Comparable<ServerVersion> {
      * Returns the current running server version.
      */
     public static ServerVersion getVersion() {
-        // 1.20.6-84-591521e (MC: 1.20.6)
+        // e.g. "26.1.2.build.72-stable"; of() extracts the leading numeric core (26.1.2).
         String serverVersion = Bukkit.getServer().getBukkitVersion();
         String[] parts = serverVersion.split("-");
         return ServerVersion.of(parts[0]);

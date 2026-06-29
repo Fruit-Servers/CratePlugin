@@ -64,7 +64,8 @@ class ItemParserTest extends BukkitTest {
         return Stream.of(
                 Arguments.of("chest"), // Missing amount
                 Arguments.of("chest abc"), // Amount is string
-                Arguments.of("nil 1") // Invalid material
+                Arguments.of("nil 1"), // Invalid material
+                Arguments.of("grass 1") // Stale legacy material
                 );
     }
 

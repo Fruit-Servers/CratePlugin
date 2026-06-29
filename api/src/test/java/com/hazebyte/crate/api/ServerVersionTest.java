@@ -33,8 +33,19 @@ public class ServerVersionTest {
         }
 
         @Test
-        public void throwsErrorOnIllegalNumberPattern() {
-            assertThrows(IllegalArgumentException.class, () -> ServerVersion.of("1.2.3.4"));
+        public void parsesRuntimeBuildString() {
+            // The live server reports a build-qualified string (Bukkit#getBukkitVersion);
+            // the leading numeric core must parse, with the non-numeric suffix ignored.
+            ServerVersion version = ServerVersion.of("26.1.2.build.72");
+            assertNotNull(version);
+            assertEquals(26, version.getMajor());
+            assertEquals(1, version.getMinor());
+            assertEquals(2, version.getRevision());
+        }
+
+        @Test
+        public void throwsErrorWhenNoLeadingVersion() {
+            assertThrows(IllegalArgumentException.class, () -> ServerVersion.of("not-a-version"));
         }
 
     }
